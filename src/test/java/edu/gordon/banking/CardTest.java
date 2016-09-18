@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package edu.gordon.banking;
 
 import edu.gordon.banking.Card;
 import org.junit.After;

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package simulation;
+package edu.gordon.atm.transaction;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -16,9 +16,9 @@ import static org.junit.Assert.*;
  *
  * @author Zeldorine
  */
-public class SimulatedBankTest {
+public class TransactionTest {
     
-    public SimulatedBankTest() {
+    public TransactionTest() {
     }
     
     @BeforeClass

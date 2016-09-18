@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package edu.gordon.atm.transaction;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -15,9 +16,9 @@ import static org.junit.Assert.*;
  *
  * @author Zeldorine
  */
-public class NewEmptyJUnitTest {
+public class TransferTest {
     
-    public NewEmptyJUnitTest() {
+    public TransferTest() {
     }
     
     @BeforeClass
@@ -36,9 +37,15 @@ public class NewEmptyJUnitTest {
     public void tearDown() {
     }
 
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
+    @Test
+    public void testCreate() {
+    }
+
+    @Test
+    public void testGetSpecificsFromCustomer() {
+    }
+
+    @Test
+    public void testCompleteTransaction() {
+    }
 }
