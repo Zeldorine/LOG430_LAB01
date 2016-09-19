@@ -14,10 +14,16 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
 /**
+ * Test d'integration entre les differentes composantes (transaction -
+ * simulation - simulatedBank) pour verifier la fonctionnalites des 4 requis : -
+ * Deposit - Transfer - Inquiry - Withdrawal
+ * 
+ * Devra etre revu apres la mise en place de l'architecture en couche
  *
  * @author Zeldorine
  */
@@ -32,7 +38,7 @@ public class TransactionTest {
     @Mock
     CustomerConsole console;
 
-    public TransactionTest(){
+    public TransactionTest() {
     }
 
     protected void setMenuChoice(int choice) throws CustomerConsole.Cancelled {
@@ -77,9 +83,63 @@ public class TransactionTest {
         console = null;
     }
 
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
+    @Test
+    public void testMakeTransactionWithdrawal() {
+    }
+
+    @Test
+    public void testMakeTransactionDeposit() {
+    }
+
+    @Test
+    public void testMakeTransactionTransfer() {
+    }
+
+    @Test
+    public void testMakeTransactionInquiry() {
+    }
+
+    @Test
+    public void testMakeTransactionNull() {
+    }
+    
+    @Test
+    public void testPerformTransactionDepositSuccess(){
+        
+    }
+    
+        @Test
+    public void testPerformTransactionTransferSuccess(){
+        
+    }
+    
+        @Test
+    public void testPerformTransactionInquirySuccess(){
+        
+    }
+    
+        @Test
+    public void testPerformTransactionWithdrawalSuccess(){
+        
+    }
+    
+        @Test
+    public void testPerformTransactionDepositInvalidPin(){
+        
+    }
+    
+        @Test
+    public void testPerformTransactionTransferInvalidPin(){
+        
+    }
+    
+        @Test
+    public void testPerformTransactionInquiryInvalidPin(){
+        
+    }
+    
+        @Test
+    public void testPerformTransactionWithdrawalInvalidPin(){
+        
+    }
 }

@@ -12,8 +12,6 @@ import edu.gordon.banking.Receipt;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -22,7 +20,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *
+ * Test unitaire du requis inquiry pour la generation de message
+ * 
  * @author Zeldorine
  */
 public class InquiryTest extends TransactionTest {

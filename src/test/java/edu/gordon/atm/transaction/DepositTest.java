@@ -5,23 +5,16 @@
  */
 package edu.gordon.atm.transaction;
 
-import com.sun.net.httpserver.Authenticator.Success;
-import edu.gordon.atm.ATM;
-import edu.gordon.atm.Session;
 import edu.gordon.atm.physical.CustomerConsole;
 import edu.gordon.atm.physical.EnvelopeAcceptor;
 import edu.gordon.atm.physical.NetworkToBank;
 import edu.gordon.banking.Balances;
-import edu.gordon.banking.Card;
 import edu.gordon.banking.Message;
 import edu.gordon.banking.Money;
 import edu.gordon.banking.Receipt;
-import edu.gordon.banking.Status;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -31,7 +24,8 @@ import static org.junit.Assert.*;
 import org.mockito.Mockito;
 
 /**
- *
+ * Test unitaire du requis deposit pour la generation de message
+ * 
  * @author Zeldorine
  */
 public class DepositTest extends TransactionTest {
