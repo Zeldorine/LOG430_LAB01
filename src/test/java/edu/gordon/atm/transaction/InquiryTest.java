@@ -5,16 +5,10 @@
  */
 package edu.gordon.atm.transaction;
 
-import edu.gordon.atm.ATM;
-import edu.gordon.atm.Session;
 import edu.gordon.atm.physical.CustomerConsole;
-import edu.gordon.atm.transaction.Inquiry;
-import edu.gordon.banking.AccountInformation;
-import edu.gordon.banking.Card;
 import edu.gordon.banking.Message;
 import edu.gordon.banking.Money;
 import edu.gordon.banking.Receipt;
-import edu.gordon.simulation.Simulation;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -26,23 +20,15 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import static org.mockito.Mockito.mock;
 
 /**
  *
  * @author Zeldorine
  */
-public class InquiryTest {
+public class InquiryTest extends TransactionTest {
 
-    @Mock
-    Card card;
-    @Mock
-    ATM atm;
-    @Mock
-    Session session;
-
+    Transaction inquiry;
+    
     public InquiryTest() {
     }
 
@@ -57,34 +43,22 @@ public class InquiryTest {
     @Before
     public void setUp() {
         try {
-            card = Mockito.mock(Card.class);
-            Mockito.when(card.getNumber()).thenReturn(123456);
-
-            atm = Mockito.mock(ATM.class);
-            Mockito.when(atm.getBankName()).thenReturn("Bank test");
-            Mockito.when(atm.getID()).thenReturn(0);
-            Mockito.when(atm.getNetworkToBank()).thenReturn(null);
-            Mockito.when(atm.getPlace()).thenReturn("test adress");
-            Mockito.when(atm.getBankName()).thenReturn("Bank test");
-
-            CustomerConsole console = Mockito.mock(CustomerConsole.class);
-            Mockito.when(atm.getCustomerConsole()).thenReturn(console);
-
-            Mockito.when(atm.getCustomerConsole().readMenuChoice(Mockito.anyString(), Mockito.any(String[].class))).thenReturn(1);
-
-            session = Mockito.mock(Session.class);
+            super.setUp();
+            setMenuChoice(Message.INQUIRY);
         } catch (CustomerConsole.Cancelled ex) {
-            fail("Error occured during setUp test class");
+            fail("Error occured during set menu choice");
         }
     }
 
     @After
     public void tearDown() {
+        inquiry.serialNumber = 1;
+        super.tearDown();
     }
 
     @Test
     public void testCreate() {
-        Inquiry inquiry = new Inquiry(atm, session, card, 1414);
+        inquiry = new Inquiry(atm, session, card, 1414);
         assertNotNull(inquiry);
     }
 
@@ -92,7 +66,8 @@ public class InquiryTest {
     public void testGetSpecificsFromCustomer() {
         Message message = null;
         try {
-            Inquiry inquiry = new Inquiry(atm, session, card, 1414);
+            inquiry = new Inquiry(atm, session, card, 1414);
+            inquiry.serialNumber = 1;
             message = inquiry.getSpecificsFromCustomer();
         } catch (CustomerConsole.Cancelled ex) {
             fail("error to get specifics message");
@@ -101,36 +76,40 @@ public class InquiryTest {
         assertNotNull(message);
         assertEquals("$0.00", message.getAmount().toString());
         assertEquals(card, message.getCard());
-        assertEquals(1, message.getFromAccount());
+        assertEquals(4, message.getFromAccount());
         assertEquals(-1, message.getToAccount());
         assertEquals(Message.INQUIRY, message.getMessageCode());
         assertEquals(1414, message.getPIN());
-        assertEquals(1, message.getSerialNumber());
-        assertEquals("INQUIRY  CARD# 123456 TRANS# 1 FROM  1 NO TO NO AMOUNT", message.toString());
+        assertEquals("INQUIRY  CARD# 123456 TRANS# 1 FROM  4 NO TO NO AMOUNT", message.toString());
     }
 
     @Test
     public void testCompleteTransaction() {
-        Inquiry inquiry = new Inquiry(atm, session, card, 1414);
-        inquiry.balances.setBalances(new Money(100), new Money(40));
-        Receipt receipt = inquiry.completeTransaction();
-
-        assertNotNull(receipt);
-        Enumeration receiptLines = receipt.getLines();
-        List<String> lines = new ArrayList();
-        
-        while (receiptLines.hasMoreElements()) {
-            lines.add((String) receiptLines.nextElement());
+        try {
+            inquiry = new Inquiry(atm, session, card, 1414);
+            inquiry.serialNumber = 1;
+            inquiry.balances.setBalances(new Money(100), new Money(40));
+            Receipt receipt = inquiry.completeTransaction();
+            
+            assertNotNull(receipt);
+            Enumeration receiptLines = receipt.getLines();
+            List<String> lines = new ArrayList();
+            
+            while (receiptLines.hasMoreElements()) {
+                lines.add((String) receiptLines.nextElement());
+            }
+            
+            assertEquals(8, lines.size());
+            assertEquals("Bank test", lines.get(1));
+            assertEquals("ATM #0 test adress", lines.get(2));
+            assertEquals("CARD 123456 TRANS #1", lines.get(3));
+            assertEquals("INQUIRY FROM: CHKG", lines.get(4));
+            assertEquals("", lines.get(5));
+            assertEquals("TOTAL BAL: $100.00", lines.get(6));
+            assertEquals("AVAILABLE: $40.00", lines.get(7));
+        } catch (CustomerConsole.Cancelled ex) {
+            fail("An error occured during complete inquiry");
         }
-        
-        assertEquals(8, lines.size());
-        assertEquals("Bank test", lines.get(1));
-        assertEquals("ATM #0 test adress", lines.get(2));
-        assertEquals("CARD 123456 TRANS #3", lines.get(3));
-        assertEquals("INQUIRY FROM: CHKG", lines.get(4));
-        assertEquals("", lines.get(5));
-        assertEquals("TOTAL BAL: $100.00", lines.get(6));
-        assertEquals("AVAILABLE: $40.00", lines.get(7));
     }
 
 }
