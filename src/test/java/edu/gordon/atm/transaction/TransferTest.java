@@ -14,9 +14,9 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Test unitaire du requis transfer pour la generation de message et la completion
- * de la trx
- * 
+ * Test unitaire du requis transfer pour la generation de message et la
+ * completion de la trx
+ *
  * @author Zeldorine
  */
 public class TransferTest extends TransactionTestHelper {
@@ -28,7 +28,7 @@ public class TransferTest extends TransactionTestHelper {
 
     @BeforeClass
     public static void setUpClass() {
-                TransactionTestHelper.setUpClass();
+        TransactionTestHelper.setUpClass();
     }
 
     @AfterClass
@@ -38,7 +38,7 @@ public class TransferTest extends TransactionTestHelper {
     @Before
     public void setUp() {
         try {
-             init(false);
+            init(false);
             setMenuChoice(Message.TRANSFER);
             setReadAmount(new Money(100));
         } catch (CustomerConsole.Cancelled ex) {

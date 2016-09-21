@@ -14,21 +14,21 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Test unitaire du requis inquiry pour la generation de message et la completion
- * de la trx
- * 
+ * Test unitaire du requis inquiry pour la generation de message et la
+ * completion de la trx
+ *
  * @author Zeldorine
  */
 public class InquiryTest extends TransactionTestHelper {
 
     Transaction inquiry;
-    
+
     public InquiryTest() {
     }
 
     @BeforeClass
     public static void setUpClass() {
-                TransactionTestHelper.setUpClass();
+        TransactionTestHelper.setUpClass();
     }
 
     @AfterClass
@@ -38,7 +38,7 @@ public class InquiryTest extends TransactionTestHelper {
     @Before
     public void setUp() {
         try {
-             init(false);
+            init(false);
             setMenuChoice(Message.INQUIRY);
         } catch (CustomerConsole.Cancelled ex) {
             fail("Error occured during set up inquiry");
@@ -84,10 +84,10 @@ public class InquiryTest extends TransactionTestHelper {
             inquiry.serialNumber = 1;
             inquiry.balances.setBalances(new Money(100), new Money(40));
             Receipt receipt = inquiry.completeTransaction();
-            
+
             assertNotNull(receipt);
             List<String> lines = getLines(receipt);
-            
+
             assertEquals(8, lines.size());
             assertEquals("Bank test", lines.get(1));
             assertEquals("ATM #0 test adress", lines.get(2));

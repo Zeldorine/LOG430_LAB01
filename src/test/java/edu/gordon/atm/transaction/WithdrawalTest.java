@@ -5,7 +5,6 @@ import edu.gordon.atm.physical.CustomerConsole;
 import edu.gordon.banking.Message;
 import edu.gordon.banking.Money;
 import edu.gordon.banking.Receipt;
-import edu.gordon.simulation.Simulation;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -15,9 +14,9 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Test unitaire du requis withdrawal pour la generation de message et la completion
- * de la trx
- * 
+ * Test unitaire du requis withdrawal pour la generation de message et la
+ * completion de la trx
+ *
  * @author Zeldorine
  */
 public class WithdrawalTest extends TransactionTestHelper {
@@ -39,7 +38,7 @@ public class WithdrawalTest extends TransactionTestHelper {
     @Before
     public void setUp() {
         try {
-             init(false);
+            init(false);
             atm.getCashDispenser().setInitialCash(new Money(200));
             setMenuChoice(Message.WITHDRAWAL);
             setReadAmount(new Money(100));

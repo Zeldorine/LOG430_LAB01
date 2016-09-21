@@ -3,17 +3,12 @@ package helper;
 import edu.gordon.atm.ATM;
 import edu.gordon.atm.Session;
 import edu.gordon.atm.physical.CustomerConsole;
-import edu.gordon.atm.physical.EnvelopeAcceptor;
 import edu.gordon.atm.transaction.Transaction;
-import edu.gordon.banking.Balances;
 import edu.gordon.banking.Card;
-import edu.gordon.banking.Message;
 import edu.gordon.banking.Money;
 import edu.gordon.banking.Receipt;
 import edu.gordon.banking.Status;
 import edu.gordon.simulation.Simulation;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -27,7 +22,6 @@ import org.junit.BeforeClass;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.spy;
-import sun.java2d.pipe.SpanShapeRenderer;
 
 /**
  *
@@ -90,7 +84,7 @@ public class TransactionTestHelper {
         Mockito.when(atm.getCustomerConsole()).thenReturn(console);
 
         if (initSimulation) {
-           Simulation sim = spy(new Simulation(atm));
+            Simulation sim = spy(new Simulation(atm));
             //Simulation.setInstance(sim);
             setSimulationInstance(sim);
             Mockito.when(sim.acceptEnvelope()).thenReturn(Boolean.TRUE);
@@ -130,8 +124,8 @@ public class TransactionTestHelper {
     public Status getFailureStatus(String msg) {
         return new Failure(msg);
     }
-    
-    private void setSimulationInstance(Simulation mock){
+
+    private void setSimulationInstance(Simulation mock) {
         try {
             Class clazz = Simulation.class;
             Field field = clazz.getDeclaredField("theInstance");
@@ -147,7 +141,7 @@ public class TransactionTestHelper {
         } catch (IllegalAccessException ex) {
             Logger.getLogger(TransactionTestHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
 
     /**

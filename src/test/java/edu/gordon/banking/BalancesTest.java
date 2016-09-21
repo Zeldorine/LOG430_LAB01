@@ -1,12 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.gordon.banking;
 
-import edu.gordon.banking.Balances;
-import edu.gordon.banking.Money;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -23,10 +16,10 @@ import org.mockito.Mockito;
 public class BalancesTest {
 
     Balances balances;
-    
+
     @Mock
     Money total;
-    
+
     @Mock
     Money available;
 
@@ -49,7 +42,7 @@ public class BalancesTest {
 
         balances.setBalances(total, available);
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -59,8 +52,8 @@ public class BalancesTest {
         assertNotNull(balances.getTotal());
         assertEquals(total, balances.getTotal());
     }
-    
-        @Test
+
+    @Test
     public void testGetAvailable() {
         assertNotNull(balances.getAvailable());
         assertEquals(available, balances.getAvailable());

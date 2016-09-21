@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.gordon.banking;
 
-import edu.gordon.banking.Money;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -101,12 +95,12 @@ public class MoneyTest {
         Money money3 = new Money(24, 58);
         money3.add(money3);
         assertEquals("$49.16", money3.toString());
-        
+
         Money money4 = new Money(-24, 48);
         Money money5 = new Money(37, 72);
         money4.add(money5);
         assertEquals("$14.20", money4.toString());
-        
+
         Money money6 = new Money(-24, -48);
         Money money7 = new Money(37, -72);
         money6.add(money7);
@@ -127,7 +121,7 @@ public class MoneyTest {
         Money money3 = new Money(24, 48);
         money3.subtract(money1);
         assertEquals("$19.21", money3.toString());
-        
+
         Money money4 = new Money(24, 48);
         Money money5 = new Money(37, 72);
         money4.subtract(money5);
@@ -139,19 +133,19 @@ public class MoneyTest {
         Money money = new Money(5, 27);
         Money copy = new Money(money);
         assertEquals(true, copy.lessEqual(money));
-        
+
         money = new Money(5, 27);
         Money money1 = new Money(5, 26);
         assertEquals(true, money1.lessEqual(money));
-        
+
         money = new Money(5, 27);
         money1 = new Money(5, 28);
         assertEquals(false, money1.lessEqual(money));
-        
+
         money = new Money(5, 27);
         money1 = new Money(-5, 28);
         assertEquals(true, money1.lessEqual(money));
-                
+
         money = new Money(-5, -27);
         money1 = new Money(-6, 28);
         assertEquals(true, money1.lessEqual(money));

@@ -18,8 +18,8 @@ import static org.junit.Assert.*;
 import org.mockito.Mockito;
 
 /**
- * Test unitaire du requis deposit pour la generation de message et la completion
- * de la trx
+ * Test unitaire du requis deposit pour la generation de message et la
+ * completion de la trx
  *
  * @author Zeldorine
  */
@@ -32,7 +32,7 @@ public class DepositTest extends TransactionTestHelper {
 
     @BeforeClass
     public static void setUpClass() {
-                TransactionTestHelper.setUpClass();
+        TransactionTestHelper.setUpClass();
     }
 
     @AfterClass
@@ -42,7 +42,7 @@ public class DepositTest extends TransactionTestHelper {
     @Before
     public void setUp() {
         try {
-             init(false);
+            init(false);
             setMenuChoice(Message.INITIATE_DEPOSIT);
             setReadAmount(new Money(100));
             EnvelopeAcceptor envelopeAcceptor = Mockito.mock(EnvelopeAcceptor.class);

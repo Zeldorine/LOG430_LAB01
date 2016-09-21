@@ -7,10 +7,7 @@ import edu.gordon.banking.Card;
 import edu.gordon.banking.Message;
 import edu.gordon.banking.Money;
 import edu.gordon.banking.Receipt;
-import edu.gordon.simulation.Simulation;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -167,7 +164,7 @@ public class TransactionTest extends TransactionTestHelper {
             fail();
         }
     }
-    
+
     @Test
     public void testPerformTransactionDepositNoEnvelop() {
         try {
@@ -232,7 +229,7 @@ public class TransactionTest extends TransactionTestHelper {
             resetConsoleMock();
             fail();
         }
-        
+
         resetConsoleMock();
     }
 
