@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.gordon.atm.transaction;
 
+import helper.TransactionTestHelper;
 import edu.gordon.atm.physical.CustomerConsole;
 import edu.gordon.banking.Message;
 import edu.gordon.banking.Money;
@@ -18,7 +14,9 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *
+ * Test unitaire du requis transfer pour la generation de message et la completion
+ * de la trx
+ * 
  * @author Zeldorine
  */
 public class TransferTest extends TransactionTestHelper {
@@ -30,6 +28,7 @@ public class TransferTest extends TransactionTestHelper {
 
     @BeforeClass
     public static void setUpClass() {
+                TransactionTestHelper.setUpClass();
     }
 
     @AfterClass
@@ -43,7 +42,7 @@ public class TransferTest extends TransactionTestHelper {
             setMenuChoice(Message.TRANSFER);
             setReadAmount(new Money(100));
         } catch (CustomerConsole.Cancelled ex) {
-            fail("Error occured during set menu choice");
+            fail("Error occured during set up transfer");
         }
     }
 

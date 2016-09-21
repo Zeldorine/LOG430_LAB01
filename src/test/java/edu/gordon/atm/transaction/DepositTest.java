@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.gordon.atm.transaction;
 
+import helper.TransactionTestHelper;
 import edu.gordon.atm.physical.CustomerConsole;
 import edu.gordon.atm.physical.EnvelopeAcceptor;
 import edu.gordon.atm.physical.NetworkToBank;
@@ -22,7 +18,8 @@ import static org.junit.Assert.*;
 import org.mockito.Mockito;
 
 /**
- * Test unitaire du requis deposit pour la generation de message
+ * Test unitaire du requis deposit pour la generation de message et la completion
+ * de la trx
  *
  * @author Zeldorine
  */
@@ -35,6 +32,7 @@ public class DepositTest extends TransactionTestHelper {
 
     @BeforeClass
     public static void setUpClass() {
+                TransactionTestHelper.setUpClass();
     }
 
     @AfterClass
@@ -50,7 +48,7 @@ public class DepositTest extends TransactionTestHelper {
             EnvelopeAcceptor envelopeAcceptor = Mockito.mock(EnvelopeAcceptor.class);
             Mockito.when(atm.getEnvelopeAcceptor()).thenReturn(envelopeAcceptor);
         } catch (CustomerConsole.Cancelled ex) {
-            fail("Error occured during set menu choice");
+            fail("Error occured during set up deposit");
         }
     }
 

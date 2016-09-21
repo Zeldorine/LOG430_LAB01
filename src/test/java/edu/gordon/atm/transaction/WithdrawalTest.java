@@ -1,14 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.gordon.atm.transaction;
 
+import helper.TransactionTestHelper;
 import edu.gordon.atm.physical.CustomerConsole;
 import edu.gordon.banking.Message;
 import edu.gordon.banking.Money;
 import edu.gordon.banking.Receipt;
+import edu.gordon.simulation.Simulation;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -18,7 +15,9 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *
+ * Test unitaire du requis withdrawal pour la generation de message et la completion
+ * de la trx
+ * 
  * @author Zeldorine
  */
 public class WithdrawalTest extends TransactionTestHelper {
@@ -30,6 +29,7 @@ public class WithdrawalTest extends TransactionTestHelper {
 
     @BeforeClass
     public static void setUpClass() {
+        TransactionTestHelper.setUpClass();
     }
 
     @AfterClass
@@ -44,7 +44,7 @@ public class WithdrawalTest extends TransactionTestHelper {
             setMenuChoice(Message.WITHDRAWAL);
             setReadAmount(new Money(100));
         } catch (CustomerConsole.Cancelled ex) {
-            fail("Error occured during set menu choice");
+            fail("Error occured during set up withdrawal");
         }
     }
 

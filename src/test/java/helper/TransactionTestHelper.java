@@ -1,18 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package edu.gordon.atm.transaction;
+package helper;
 
 import edu.gordon.atm.ATM;
 import edu.gordon.atm.Session;
 import edu.gordon.atm.physical.CustomerConsole;
-import edu.gordon.atm.physical.NetworkToBank;
-import edu.gordon.atm.physical.ReceiptPrinter;
-import edu.gordon.banking.Balances;
 import edu.gordon.banking.Card;
-import edu.gordon.banking.Message;
 import edu.gordon.banking.Money;
 import edu.gordon.banking.Receipt;
 import edu.gordon.banking.Status;
@@ -35,13 +26,13 @@ import static org.mockito.Mockito.spy;
 public class TransactionTestHelper {
 
     @Mock
-    Card card;
+    protected Card card;
     @Mock
-    ATM atm;
+    protected ATM atm;
     @Mock
-    Session session;
+    protected Session session;
     @Mock
-    CustomerConsole console;
+    protected CustomerConsole console;
 
     public TransactionTestHelper() {
     }
@@ -56,6 +47,7 @@ public class TransactionTestHelper {
 
     @BeforeClass
     public static void setUpClass() {
+        Simulation.setTimeToWait(0, 0, 0);
     }
 
     @AfterClass
@@ -92,7 +84,7 @@ public class TransactionTestHelper {
         if (receipt == null) {
             return lines;
         }
-        
+
         Enumeration receiptLines = receipt.getLines();
 
         while (receiptLines.hasMoreElements()) {

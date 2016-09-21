@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.gordon.atm.transaction;
 
+import helper.TransactionTestHelper;
 import edu.gordon.atm.Session;
 import edu.gordon.atm.physical.CustomerConsole;
 import edu.gordon.banking.Card;
@@ -25,10 +21,12 @@ import org.junit.Test;
  * simulation - simulatedBank) pour verifier la fonctionnalites des 4 requis : -
  * Deposit - Transfer - Inquiry - Withdrawal
  *
- * Pour faire les test d'integration, l'atm doit etre mocké (partiellement via un spy) pour simuler les
- * actions utilisateurs sur la console afin de generer une transaction complete et utiliser la classe simulatedBank.
- * Les seules actiosn simulees sont les input faite par l'utilisateur via la console de l'atm. 
- * De cette facon, nous pouvons tester entierement le flow de chacun des requis.
+ * Pour faire les test d'integration, l'atm doit etre mocké (partiellement via
+ * un spy) pour simuler les actions utilisateurs sur la console afin de generer
+ * une transaction complete et utiliser la classe simulatedBank. Les seules
+ * actiosn simulees sont les input faite par l'utilisateur via la console de
+ * l'atm. De cette facon, nous pouvons tester entierement le flow de chacun des
+ * requis.
  *
  * Devra etre revu apres la mise en place de l'architecture en couche
  *
@@ -44,6 +42,7 @@ public class TransactionTest extends TransactionTestHelper {
 
     @BeforeClass
     public static void setUpClass() {
+                TransactionTestHelper.setUpClass();
     }
 
     @AfterClass
@@ -91,21 +90,21 @@ public class TransactionTest extends TransactionTestHelper {
 
     }
 
-    //@Test
+    @Test
     public void testPerformTransactionInquirySuccess() {
         try {
             setMenuChoice(3);
             Transaction inquiry = Transaction.makeTransaction(atm, session, card, 1234);
             inquiry.serialNumber = 1;
-            setMenuChoice(1);
+            setMenuChoice(0);
             inquiry.performTransaction();
-            
+
             Message message = inquiry.message;
             Receipt receipt = inquiry.receipt;
-            
+
             Assert.assertNotNull(message);
             Assert.assertNotNull(receipt);
-            
+
             assertEquals("$0.00", message.getAmount().toString());
             assertEquals(card, message.getCard());
             assertEquals(0, message.getFromAccount());
@@ -113,9 +112,9 @@ public class TransactionTest extends TransactionTestHelper {
             assertEquals(Message.INQUIRY, message.getMessageCode());
             assertEquals(1234, message.getPIN());
             assertEquals("INQUIRY  CARD# 2 TRANS# 1 FROM  0 NO TO NO AMOUNT", message.toString());
-            
+
             List<String> lines = getLines(receipt);
-            
+
             assertEquals(8, lines.size());
             assertEquals("Bank test", lines.get(1));
             assertEquals("ATM #0 test adress", lines.get(2));
