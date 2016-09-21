@@ -12,8 +12,6 @@ import edu.gordon.banking.Balances;
 import edu.gordon.banking.Message;
 import edu.gordon.banking.Money;
 import edu.gordon.banking.Receipt;
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -25,13 +23,13 @@ import org.mockito.Mockito;
 
 /**
  * Test unitaire du requis deposit pour la generation de message
- * 
+ *
  * @author Zeldorine
  */
-public class DepositTest extends TransactionTest {
+public class DepositTest extends TransactionTestHelper {
 
     Transaction deposit;
-    
+
     public DepositTest() {
     }
 
@@ -58,7 +56,6 @@ public class DepositTest extends TransactionTest {
 
     @After
     public void tearDown() {
-        deposit.serialNumber = 1;
         super.tearDown();
     }
 
@@ -95,22 +92,17 @@ public class DepositTest extends TransactionTest {
             setMenuChoice(Message.COMPLETE_DEPOSIT);
             NetworkToBank network = Mockito.mock(NetworkToBank.class);
             Mockito.when(atm.getNetworkToBank()).thenReturn(network);
-            Mockito.when(network.sendMessage(Mockito.any(Message.class), Mockito.any(Balances.class))).thenReturn(null);
+            Mockito.when(network.sendMessage(Mockito.any(Message.class), Mockito.any(Balances.class))).thenReturn(getSuccessStatus());
 
             deposit = new Deposit(atm, session, card, 1414);
             deposit.serialNumber = 1;
             deposit.getSpecificsFromCustomer();
             deposit.balances.setBalances(new Money(200), new Money(100));
             Receipt receipt = deposit.completeTransaction();
-            
+
             assertNotNull(receipt);
-            Enumeration receiptLines = receipt.getLines();
-            List<String> lines = new ArrayList();
-            
-            while (receiptLines.hasMoreElements()) {
-                lines.add((String) receiptLines.nextElement());
-            }
-            
+            List<String> lines = getLines(receipt);
+
             assertEquals(8, lines.size());
             assertEquals("Bank test", lines.get(1));
             assertEquals("ATM #0 test adress", lines.get(2));

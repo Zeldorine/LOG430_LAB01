@@ -9,8 +9,6 @@ import edu.gordon.atm.physical.CustomerConsole;
 import edu.gordon.banking.Message;
 import edu.gordon.banking.Money;
 import edu.gordon.banking.Receipt;
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -24,7 +22,7 @@ import static org.junit.Assert.*;
  * 
  * @author Zeldorine
  */
-public class InquiryTest extends TransactionTest {
+public class InquiryTest extends TransactionTestHelper {
 
     Transaction inquiry;
     
@@ -51,7 +49,6 @@ public class InquiryTest extends TransactionTest {
 
     @After
     public void tearDown() {
-        inquiry.serialNumber = 1;
         super.tearDown();
     }
 
@@ -91,12 +88,7 @@ public class InquiryTest extends TransactionTest {
             Receipt receipt = inquiry.completeTransaction();
             
             assertNotNull(receipt);
-            Enumeration receiptLines = receipt.getLines();
-            List<String> lines = new ArrayList();
-            
-            while (receiptLines.hasMoreElements()) {
-                lines.add((String) receiptLines.nextElement());
-            }
+            List<String> lines = getLines(receipt);
             
             assertEquals(8, lines.size());
             assertEquals("Bank test", lines.get(1));
