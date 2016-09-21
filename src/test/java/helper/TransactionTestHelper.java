@@ -85,9 +85,8 @@ public class TransactionTestHelper {
 
         if (initSimulation) {
             Simulation sim = spy(new Simulation(atm));
-            //Simulation.setInstance(sim);
-            setSimulationInstance(sim);
             Mockito.when(sim.acceptEnvelope()).thenReturn(Boolean.TRUE);
+            setSimulationInstance(sim);
         } else {
             new Simulation(atm);
         }
