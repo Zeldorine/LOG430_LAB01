@@ -39,7 +39,7 @@ public class WithdrawalTest extends TransactionTestHelper {
     @Before
     public void setUp() {
         try {
-            super.setUp();
+             init(false);
             atm.getCashDispenser().setInitialCash(new Money(200));
             setMenuChoice(Message.WITHDRAWAL);
             setReadAmount(new Money(100));

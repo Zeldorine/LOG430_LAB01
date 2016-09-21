@@ -38,7 +38,7 @@ public class InquiryTest extends TransactionTestHelper {
     @Before
     public void setUp() {
         try {
-            super.setUp();
+             init(false);
             setMenuChoice(Message.INQUIRY);
         } catch (CustomerConsole.Cancelled ex) {
             fail("Error occured during set up inquiry");

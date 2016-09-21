@@ -3,14 +3,23 @@ package helper;
 import edu.gordon.atm.ATM;
 import edu.gordon.atm.Session;
 import edu.gordon.atm.physical.CustomerConsole;
+import edu.gordon.atm.physical.EnvelopeAcceptor;
+import edu.gordon.atm.transaction.Transaction;
+import edu.gordon.banking.Balances;
 import edu.gordon.banking.Card;
+import edu.gordon.banking.Message;
 import edu.gordon.banking.Money;
 import edu.gordon.banking.Receipt;
 import edu.gordon.banking.Status;
 import edu.gordon.simulation.Simulation;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -18,6 +27,7 @@ import org.junit.BeforeClass;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.spy;
+import sun.java2d.pipe.SpanShapeRenderer;
 
 /**
  *
@@ -41,6 +51,10 @@ public class TransactionTestHelper {
         Mockito.when(console.readMenuChoice(Mockito.anyString(), Mockito.any(String[].class))).thenReturn(choice);
     }
 
+    protected void resetConsoleMock() {
+        Mockito.reset(console);
+    }
+
     protected void setReadAmount(Money amount) throws CustomerConsole.Cancelled {
         Mockito.when(console.readAmount(Mockito.anyString())).thenReturn(amount);
     }
@@ -48,6 +62,7 @@ public class TransactionTestHelper {
     @BeforeClass
     public static void setUpClass() {
         Simulation.setTimeToWait(0, 0, 0);
+        Transaction.timeToWait = 0;
     }
 
     @AfterClass
@@ -56,19 +71,33 @@ public class TransactionTestHelper {
 
     @Before
     public void setUp() {
+    }
+
+    protected void init(boolean initSimulation) {
         card = Mockito.mock(Card.class);
         Mockito.when(card.getNumber()).thenReturn(123456);
 
-        initATMMock();
+        initATMMock(initSimulation);
 
         session = Mockito.mock(Session.class);
     }
 
-    protected void initATMMock() {
+    protected void initATMMock(boolean initSimulation) {
         atm = spy(new ATM(0, "test adress", "Bank test", null));
+        atm.getCashDispenser().setInitialCash(new Money(200));
+
         console = Mockito.mock(CustomerConsole.class);
         Mockito.when(atm.getCustomerConsole()).thenReturn(console);
-        new Simulation(atm);
+
+        if (initSimulation) {
+           Simulation sim = spy(new Simulation(atm));
+            //Simulation.setInstance(sim);
+            setSimulationInstance(sim);
+            Mockito.when(sim.acceptEnvelope()).thenReturn(Boolean.TRUE);
+        } else {
+            new Simulation(atm);
+        }
+
     }
 
     @After
@@ -100,6 +129,25 @@ public class TransactionTestHelper {
 
     public Status getFailureStatus(String msg) {
         return new Failure(msg);
+    }
+    
+    private void setSimulationInstance(Simulation mock){
+        try {
+            Class clazz = Simulation.class;
+            Field field = clazz.getDeclaredField("theInstance");
+            field.setAccessible(true);
+            field.set(Simulation.getInstance(), mock);
+            field.setAccessible(false);
+        } catch (NoSuchFieldException ex) {
+            Logger.getLogger(TransactionTestHelper.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SecurityException ex) {
+            Logger.getLogger(TransactionTestHelper.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(TransactionTestHelper.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(TransactionTestHelper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
     /**

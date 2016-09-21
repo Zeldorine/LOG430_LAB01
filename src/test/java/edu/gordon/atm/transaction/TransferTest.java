@@ -38,7 +38,7 @@ public class TransferTest extends TransactionTestHelper {
     @Before
     public void setUp() {
         try {
-            super.setUp();
+             init(false);
             setMenuChoice(Message.TRANSFER);
             setReadAmount(new Money(100));
         } catch (CustomerConsole.Cancelled ex) {

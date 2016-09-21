@@ -42,7 +42,7 @@ public class DepositTest extends TransactionTestHelper {
     @Before
     public void setUp() {
         try {
-            super.setUp();
+             init(false);
             setMenuChoice(Message.INITIATE_DEPOSIT);
             setReadAmount(new Money(100));
             EnvelopeAcceptor envelopeAcceptor = Mockito.mock(EnvelopeAcceptor.class);

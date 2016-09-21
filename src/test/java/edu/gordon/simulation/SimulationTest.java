@@ -43,13 +43,12 @@ public class SimulationTest extends TransactionTestHelper {
     @Before
     public void setUp() {
         try {
-            super.setUp();
+            init(false);
             simulation = new Simulation(atm);
 
             balances = new Balances();
             balances.setBalances(new Money(200), new Money(200));
 
-            atm.getCashDispenser().setInitialCash(new Money(200));
             setMenuChoice(Message.WITHDRAWAL);
             setReadAmount(new Money(100));
         } catch (CustomerConsole.Cancelled ex) {
