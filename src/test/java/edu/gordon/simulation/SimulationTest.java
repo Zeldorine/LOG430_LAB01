@@ -1,12 +1,14 @@
 package edu.gordon.simulation;
 
-import edu.gordon.atm.physical.CustomerConsole;
 import edu.gordon.banking.Balances;
 import edu.gordon.banking.Card;
 import helper.TransactionTestHelper;
 import edu.gordon.banking.Message;
 import edu.gordon.banking.Money;
 import edu.gordon.banking.Status;
+import edu.gordon.exception.Cancelled;
+import edu.gordon.core.Network;
+import edu.gordon.network.SimulatedNetworkToBank;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -25,7 +27,7 @@ import static org.junit.Assert.*;
  */
 public class SimulationTest extends TransactionTestHelper {
 
-    Simulation simulation;
+    Network network;
     Balances balances;
 
     public SimulationTest() {
@@ -44,14 +46,15 @@ public class SimulationTest extends TransactionTestHelper {
     public void setUp() {
         try {
             init(false);
-            simulation = new Simulation(atm);
+            //simulation = new Simulation(atm);
+            network = new SimulatedNetworkToBank(new SimLog(), null);
 
             balances = new Balances();
             balances.setBalances(new Money(200), new Money(200));
 
             setMenuChoice(Message.WITHDRAWAL);
             setReadAmount(new Money(100));
-        } catch (CustomerConsole.Cancelled ex) {
+        } catch (Cancelled ex) {
             fail("Error occured during set up simulation test");
         }
     }
@@ -64,7 +67,7 @@ public class SimulationTest extends TransactionTestHelper {
     public void TestSendMessageSuccess() {
         Card card = new Card(1);
         Message message = new Message(Message.WITHDRAWAL, card, 42, 1, 1, -1, new Money(100));
-        Status status = simulation.sendMessage(message, balances);
+        Status status = network.sendMessage(message, balances);
         assertNotNull(status);
         assertEquals(true, status.isSuccess());
     }
@@ -73,7 +76,7 @@ public class SimulationTest extends TransactionTestHelper {
     public void TestSendMessageFail() {
         Card card = new Card(1);
         Message message = new Message(Message.WITHDRAWAL, card, 0, 1, 1, -1, new Money(100));
-        Status status = simulation.sendMessage(message, balances);
+        Status status = network.sendMessage(message, balances);
         assertNotNull(status);
         assertEquals(false, status.isSuccess());
         assertEquals("Invalid PIN", status.getMessage());

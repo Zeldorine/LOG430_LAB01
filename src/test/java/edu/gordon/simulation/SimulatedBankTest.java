@@ -1,5 +1,6 @@
 package edu.gordon.simulation;
 
+import edu.gordon.network.SimulatedBank;
 import edu.gordon.banking.Balances;
 import edu.gordon.banking.Card;
 import edu.gordon.banking.Message;
