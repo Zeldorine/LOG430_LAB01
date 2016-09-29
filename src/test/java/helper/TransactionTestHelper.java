@@ -7,12 +7,11 @@ import edu.gordon.transaction.Transaction;
 import edu.gordon.banking.Card;
 import edu.gordon.banking.Money;
 import edu.gordon.banking.Receipt;
+import edu.gordon.banking.State;
 import edu.gordon.banking.Status;
 import edu.gordon.core.EnvelopeAcceptor;
 import edu.gordon.exception.Cancelled;
-import edu.gordon.core.Network;
 import edu.gordon.simulation.CoreFactorySimulated;
-import edu.gordon.simulation.SimEnvelopeAcceptor;
 import edu.gordon.simulation.Simulation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -82,7 +81,7 @@ public class TransactionTestHelper {
     }
 
     protected void initATMMock(boolean initSimulation) {
-        atm = spy(new ATM(0, "test adress", "Bank test", null, new CoreFactorySimulated()));
+        atm = spy(new ATM(0, "test adress", "Bank test", null, State.SIMULATION));
         atm.getCashDispenser().setInitialCash(new Money(200));
 
         console = Mockito.mock(CustomerConsolePhysical.class);
