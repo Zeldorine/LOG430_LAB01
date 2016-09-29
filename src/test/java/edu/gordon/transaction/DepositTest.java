@@ -59,7 +59,7 @@ public class DepositTest extends TransactionTestHelper {
 
     @Test
     public void testCreate() {
-        deposit = new Deposit(atm.getID(), atm.getBankName(), atm.getPlace(), atm.getNetworkToBank(), card, 1414);
+        deposit = new Deposit(atm.getID(), atm.getBankName(), atm.getPlace(), card, 1414);
         assertNotNull(deposit);
     }
 
@@ -67,7 +67,7 @@ public class DepositTest extends TransactionTestHelper {
     public void testGetSpecificsFromCustomer() {
         Message message = null;
         try {
-            deposit = new Deposit(atm.getID(), atm.getBankName(), atm.getPlace(), atm.getNetworkToBank(), card, 1414);
+            deposit = new Deposit(atm.getID(), atm.getBankName(), atm.getPlace(), card, 1414);
             deposit.serialNumber = 1;
             message = deposit.getSpecificsFromCustomer(-1,1,new Money(100));
         } catch (Cancelled ex) {
@@ -92,7 +92,7 @@ public class DepositTest extends TransactionTestHelper {
             Mockito.when(atm.getNetworkToBank()).thenReturn(network);
             Mockito.when(network.sendMessage(Mockito.any(Message.class), Mockito.any(Balances.class))).thenReturn(getSuccessStatus());
 
-            deposit = new Deposit(atm.getID(), atm.getBankName(), atm.getPlace(), atm.getNetworkToBank(), card, 1414);
+            deposit = new Deposit(atm.getID(), atm.getBankName(), atm.getPlace(), card, 1414);
             deposit.serialNumber = 1;
             setReadAmount(new Money(100));
             deposit.getSpecificsFromCustomer(-1,1,new Money(100));

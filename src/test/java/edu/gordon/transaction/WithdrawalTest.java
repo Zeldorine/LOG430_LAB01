@@ -54,7 +54,7 @@ public class WithdrawalTest extends TransactionTestHelper {
 
     @Test
     public void testCreate() {
-        withdrawal = new Withdrawal(atm.getID(), atm.getBankName(), atm.getPlace(), atm.getNetworkToBank(), card, 1414);
+        withdrawal = new Withdrawal(atm.getID(), atm.getBankName(), atm.getPlace(), card, 1414);
         assertNotNull(withdrawal);
     }
 
@@ -62,7 +62,7 @@ public class WithdrawalTest extends TransactionTestHelper {
     public void testGetSpecificsFromCustomer() {
         Message message = null;
         try {
-            withdrawal = new Withdrawal(atm.getID(), atm.getBankName(), atm.getPlace(), atm.getNetworkToBank(), card, 1414);
+            withdrawal = new Withdrawal(atm.getID(), atm.getBankName(), atm.getPlace(), card, 1414);
             withdrawal.serialNumber = 1;
             setMenuChoice(2);
             message = withdrawal.getSpecificsFromCustomer(2,-1,new Money(100));
@@ -83,7 +83,7 @@ public class WithdrawalTest extends TransactionTestHelper {
     @Test
     public void testCompleteTransaction() {
         try {
-            withdrawal = new Withdrawal(atm.getID(), atm.getBankName(), atm.getPlace(), atm.getNetworkToBank(), card, 1414);
+            withdrawal = new Withdrawal(atm.getID(), atm.getBankName(), atm.getPlace(), card, 1414);
             withdrawal.serialNumber = 1;
             withdrawal.balances.setBalances(new Money(100), new Money(40));
             setMenuChoice(2);

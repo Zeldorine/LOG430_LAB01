@@ -53,7 +53,7 @@ public class TransferTest extends TransactionTestHelper {
 
     @Test
     public void testCreate() {
-        transfer = new Transfer(atm.getID(), atm.getBankName(), atm.getPlace(), atm.getNetworkToBank(), card, 1414);
+        transfer = new Transfer(atm.getID(), atm.getBankName(), atm.getPlace(), card, 1414);
         assertNotNull(transfer);
     }
 
@@ -61,7 +61,7 @@ public class TransferTest extends TransactionTestHelper {
     public void testGetSpecificsFromCustomer() {
         Message message = null;
         try {
-            transfer = new Transfer(atm.getID(), atm.getBankName(), atm.getPlace(), atm.getNetworkToBank(), card, 1414);
+            transfer = new Transfer(atm.getID(), atm.getBankName(), atm.getPlace(), card, 1414);
             transfer.serialNumber = 1;
             message = transfer.getSpecificsFromCustomer(3,3,new Money(100));
         } catch (Cancelled ex) {
@@ -81,7 +81,7 @@ public class TransferTest extends TransactionTestHelper {
     @Test
     public void testCompleteTransaction() {
         try {
-            transfer = new Transfer(atm.getID(), atm.getBankName(), atm.getPlace(), atm.getNetworkToBank(), card, 1414);
+            transfer = new Transfer(atm.getID(), atm.getBankName(), atm.getPlace(), card, 1414);
             transfer.serialNumber = 1;
             transfer.balances.setBalances(new Money(100), new Money(40));
             setMenuChoice(2);

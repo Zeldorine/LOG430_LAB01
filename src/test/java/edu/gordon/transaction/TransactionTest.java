@@ -3,16 +3,25 @@ package edu.gordon.transaction;
 import helper.TransactionTestHelper;
 import edu.gordon.atm.Session;
 import edu.gordon.banking.Card;
+import edu.gordon.banking.Message;
+import edu.gordon.banking.Money;
+import edu.gordon.banking.Receipt;
 import edu.gordon.exception.Cancelled;
+import edu.gordon.exception.CardRetained;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 /**
  * Test d'integration entre les differentes composantes (transaction -
@@ -122,19 +131,21 @@ public class TransactionTest extends TransactionTestHelper {
         }
     }
 
-    /*@Test
+    @Test
     public void testPerformTransactionDepositSuccess() {
         try {
             setMenuChoice(1);
             setReadAmount(new Money(100));
-            Transaction deposit = Transaction.makeTransaction(atm, session, card, 1234);
+            Transaction deposit = session.makeTransaction(atm.getID(), atm.getBankName(),
+                    atm.getPlace(), 1, atm.getNetworkToBank(), card, 1234);
             assertThat(deposit, instanceOf(Deposit.class));
             deposit.serialNumber = 1;
             setMenuChoice(0);
-            deposit.performTransaction();
+            session.performTransaction(deposit);
+            setMenuChoice(0);
 
-            Message message = deposit.message;
-            Receipt receipt = deposit.receipt;
+            Message message = session.getMessage();
+            Receipt receipt = session.getReceipt();
 
             Assert.assertNotNull(message);
             Assert.assertNotNull(receipt);
@@ -159,7 +170,7 @@ public class TransactionTest extends TransactionTestHelper {
             assertEquals("AVAILABLE: $100.00", lines.get(7));
         } catch (Cancelled ex) {
             fail();
-        } catch (Transaction.CardRetained ex) {
+        } catch (CardRetained ex) {
             fail();
         }
     }
@@ -169,12 +180,13 @@ public class TransactionTest extends TransactionTestHelper {
         try {
             setMenuChoice(1);
             setReadAmount(new Money(100));
-            Transaction withdrawal = Transaction.makeTransaction(atm, session, card, 1234);
+            Transaction withdrawal = session.makeTransaction(atm.getID(), atm.getBankName(),
+                    atm.getPlace(), 1, atm.getNetworkToBank(), card, 1234);
             assertThat(withdrawal, instanceOf(Deposit.class));
             withdrawal.serialNumber = 1;
             setMenuChoice(0);
-            withdrawal.performTransaction();
-        } catch (CustomerConsolePhysical.Cancelled ex) {
+            session.performTransaction(withdrawal);
+        } catch (Cancelled ex) {
             //C'est ce qu'on veut
         } catch (CardRetained ex) {
             fail();
@@ -185,7 +197,8 @@ public class TransactionTest extends TransactionTestHelper {
     public void testPerformTransactionTransferSuccess() {
         try {
             setMenuChoice(2);
-            Transaction transfer = Transaction.makeTransaction(atm, session, card, 1234);
+            Transaction transfer = session.makeTransaction(atm.getID(), atm.getBankName(),
+                    atm.getPlace(), 2, atm.getNetworkToBank(), card, 1234);
             assertThat(transfer, instanceOf(Transfer.class));
             transfer.serialNumber = 1;
             setMenuChoice(0);
@@ -194,11 +207,13 @@ public class TransactionTest extends TransactionTestHelper {
             setReadAmount(new Money(100));
             Mockito.when(atm.getCustomerConsole().readMenuChoice(Mockito.eq("Account to transfer from"), Mockito.any(String[].class))).thenReturn(2);
             Mockito.when(atm.getCustomerConsole().readMenuChoice(Mockito.eq("Account to transfer to"), Mockito.any(String[].class))).thenReturn(0);
+            Mockito.when(atm.getCustomerConsole().readMenuChoice(Mockito.contains("Would you like to do another transaction?"), Mockito.any(String[].class))).thenReturn(1);
 
-            transfer.performTransaction();
+            session.performTransaction(transfer);
+            setMenuChoice(1);
 
-            Message message = transfer.message;
-            Receipt receipt = transfer.receipt;
+            Message message = session.getMessage();
+            Receipt receipt = session.getReceipt();
 
             Assert.assertNotNull(message);
             Assert.assertNotNull(receipt);
@@ -236,14 +251,14 @@ public class TransactionTest extends TransactionTestHelper {
     public void testPerformTransactionInquirySuccess() {
         try {
             setMenuChoice(3);
-            Transaction inquiry = Transaction.makeTransaction(atm, session, card, 1234);
-            assertThat(inquiry, instanceOf(Inquiry.class));
+            Transaction inquiry = session.makeTransaction(atm.getID(), atm.getBankName(),
+                    atm.getPlace(), 3, atm.getNetworkToBank(), card, 1234);
             inquiry.serialNumber = 1;
             setMenuChoice(0);
-            inquiry.performTransaction();
+            session.performTransaction(inquiry);
 
-            Message message = inquiry.message;
-            Receipt receipt = inquiry.receipt;
+            Message message = session.getMessage();
+            Receipt receipt = session.getReceipt();
 
             Assert.assertNotNull(message);
             Assert.assertNotNull(receipt);
@@ -277,14 +292,15 @@ public class TransactionTest extends TransactionTestHelper {
     public void testPerformTransactionWithdrawalSuccess() {
         try {
             setMenuChoice(0);
-            Transaction withdrawal = Transaction.makeTransaction(atm, session, card, 1234);
+            Transaction withdrawal = session.makeTransaction(atm.getID(), atm.getBankName(),
+                    atm.getPlace(), 0, atm.getNetworkToBank(), card, 1234);
             assertThat(withdrawal, instanceOf(Withdrawal.class));
             withdrawal.serialNumber = 1;
             setMenuChoice(0);
-            withdrawal.performTransaction();
+            session.performTransaction(withdrawal);
 
-            Message message = withdrawal.message;
-            Receipt receipt = withdrawal.receipt;
+            Message message = session.getMessage();
+            Receipt receipt = session.getReceipt();
 
             Assert.assertNotNull(message);
             Assert.assertNotNull(receipt);
@@ -319,11 +335,12 @@ public class TransactionTest extends TransactionTestHelper {
         try {
             setMenuChoice(3);
             Mockito.when(atm.getCustomerConsole().readPIN(Mockito.anyString())).thenReturn(-1);
-            Transaction inquiry = Transaction.makeTransaction(atm, session, card, 1515);
+            Transaction inquiry = session.makeTransaction(atm.getID(), atm.getBankName(),
+                    atm.getPlace(), 3, atm.getNetworkToBank(), card, 1234);
             assertThat(inquiry, instanceOf(Inquiry.class));
             inquiry.serialNumber = 1;
             setMenuChoice(0);
-            inquiry.performTransaction();
+            session.performTransaction(inquiry);
 
             //Status status = inquiry.
         } catch (Cancelled ex) {
@@ -331,5 +348,5 @@ public class TransactionTest extends TransactionTestHelper {
         } catch (CardRetained cardRetained) {
             // Ne rien faire, on veut cette exception !
         }
-    }*/
+    }
 }

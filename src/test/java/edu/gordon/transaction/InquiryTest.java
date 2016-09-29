@@ -55,7 +55,7 @@ public class InquiryTest extends TransactionTestHelper {
 
     @Test
     public void testCreate() {
-        inquiry = new Inquiry(atm.getID(), atm.getBankName(), atm.getPlace(), atm.getNetworkToBank(), card, 1414);
+        inquiry = new Inquiry(atm.getID(), atm.getBankName(), atm.getPlace(), card, 1414);
         assertNotNull(inquiry);
     }
 
@@ -63,7 +63,7 @@ public class InquiryTest extends TransactionTestHelper {
     public void testGetSpecificsFromCustomer() {
         Message message = null;
         try {
-            inquiry = new Inquiry(atm.getID(), atm.getBankName(), atm.getPlace(), atm.getNetworkToBank(), card, 1414);
+            inquiry = new Inquiry(atm.getID(), atm.getBankName(), atm.getPlace(), card, 1414);
             inquiry.serialNumber = 1;
             message = inquiry.getSpecificsFromCustomer(4,-1,null);
         } catch (Cancelled ex) {
@@ -83,7 +83,7 @@ public class InquiryTest extends TransactionTestHelper {
     @Test
     public void testCompleteTransaction() {
         try {
-            inquiry = new Inquiry(atm.getID(), atm.getBankName(), atm.getPlace(), atm.getNetworkToBank(), card, 1414);
+            inquiry = new Inquiry(atm.getID(), atm.getBankName(), atm.getPlace(),  card, 1414);
             inquiry.serialNumber = 1;
             inquiry.balances.setBalances(new Money(100), new Money(40));
             Receipt receipt = inquiry.completeTransaction();

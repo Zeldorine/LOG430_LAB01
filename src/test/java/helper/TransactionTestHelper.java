@@ -8,9 +8,11 @@ import edu.gordon.banking.Card;
 import edu.gordon.banking.Money;
 import edu.gordon.banking.Receipt;
 import edu.gordon.banking.Status;
+import edu.gordon.core.EnvelopeAcceptor;
 import edu.gordon.exception.Cancelled;
 import edu.gordon.core.Network;
 import edu.gordon.simulation.CoreFactorySimulated;
+import edu.gordon.simulation.SimEnvelopeAcceptor;
 import edu.gordon.simulation.Simulation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -88,16 +90,25 @@ public class TransactionTestHelper {
 
         if (initSimulation) {
             Simulation sim = spy(new Simulation(atm.getOperatorPanel(), atm.getCardReader(),
-                atm.getDisplay(), atm.getKeyboard(), atm.getCashDispenser(), atm.getEnvelopeAcceptor(),
-                atm.getReceiptPrinter()));
-            //Mockito.when(sim.acceptEnvelope()).thenReturn(Boolean.TRUE);
-            setSimulationInstance(sim);
+                    atm.getDisplay(), atm.getKeyboard(), atm.getCashDispenser(), atm.getEnvelopeAcceptor(),
+                    atm.getReceiptPrinter()));
+
+            setSimulationInstance(ATM.class, "envelopeAcceptor", atm, getEnvelopeAcceptor());
+            setSimulationInstance(Simulation.class, "theInstance", Simulation.getInstance(), sim);
         } else {
             new Simulation(atm.getOperatorPanel(), atm.getCardReader(),
-                atm.getDisplay(), atm.getKeyboard(), atm.getCashDispenser(), atm.getEnvelopeAcceptor(),
-                atm.getReceiptPrinter());
+                    atm.getDisplay(), atm.getKeyboard(), atm.getCashDispenser(), atm.getEnvelopeAcceptor(),
+                    atm.getReceiptPrinter());
         }
 
+    }
+
+    private EnvelopeAcceptor getEnvelopeAcceptor() {
+        return new EnvelopeAcceptor() {
+            public boolean acceptEnvelope() throws Cancelled {
+                return true;
+            }
+        };
     }
 
     @After
@@ -131,12 +142,11 @@ public class TransactionTestHelper {
         return new Failure(msg);
     }
 
-    private void setSimulationInstance(Simulation mock) {
+    private void setSimulationInstance(Class clazz, String attribut, Object instance, Object newValue) {
         try {
-            Class clazz = Simulation.class;
-            Field field = clazz.getDeclaredField("theInstance");
+            Field field = clazz.getDeclaredField(attribut);
             field.setAccessible(true);
-            field.set(Simulation.getInstance(), mock);
+            field.set(instance, newValue);
             field.setAccessible(false);
         } catch (NoSuchFieldException ex) {
             Logger.getLogger(TransactionTestHelper.class.getName()).log(Level.SEVERE, null, ex);
@@ -147,7 +157,6 @@ public class TransactionTestHelper {
         } catch (IllegalAccessException ex) {
             Logger.getLogger(TransactionTestHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     /**
