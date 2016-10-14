@@ -1,5 +1,6 @@
 package edu.gordon.core;
 
+import com.google.common.eventbus.EventBus;
 import java.net.InetAddress;
 
 /**
@@ -9,7 +10,7 @@ import java.net.InetAddress;
 public interface CoreFactory {
     public CardReader getCardReader(Listener listener);
     public Log getLog();
-    public Network getNetwork(Log log, InetAddress bankAddress);
+    public Network getNetwork(EventBus bus, Log log, InetAddress bankAddress);
     public CashDispenser getCashDispenser(Log log);
     public EnvelopeAcceptor getEnvelopeAcceptor(Log log);
     public CustomerConsole getCustomerConsole();

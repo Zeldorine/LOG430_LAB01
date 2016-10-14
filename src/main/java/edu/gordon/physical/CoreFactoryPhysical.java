@@ -1,5 +1,6 @@
 package edu.gordon.physical;
 
+import com.google.common.eventbus.EventBus;
 import edu.gordon.core.CardReader;
 import edu.gordon.core.CashDispenser;
 import edu.gordon.core.CoreFactory;
@@ -29,8 +30,8 @@ public class CoreFactoryPhysical implements CoreFactory {
         return new LogPhysical();
     }
 
-    public Network getNetwork(Log log, InetAddress bankAddress) {
-        return new NetworkToBank(log, bankAddress);
+    public Network getNetwork(EventBus bus, Log log, InetAddress bankAddress) {
+        return new NetworkToBank(bus, log, bankAddress);
     }
 
     public CashDispenser getCashDispenser(Log log) {

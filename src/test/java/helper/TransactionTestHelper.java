@@ -1,5 +1,7 @@
 package helper;
 
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import edu.gordon.atm.ATM;
 import edu.gordon.atm.Session;
 import edu.gordon.physical.CustomerConsolePhysical;
@@ -11,7 +13,6 @@ import edu.gordon.banking.State;
 import edu.gordon.banking.Status;
 import edu.gordon.core.EnvelopeAcceptor;
 import edu.gordon.exception.Cancelled;
-import edu.gordon.simulation.CoreFactorySimulated;
 import edu.gordon.simulation.Simulation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -42,7 +43,12 @@ public class TransactionTestHelper {
     @Mock
     protected CustomerConsolePhysical console;
 
+    protected Status status;
+
+    protected static final EventBus bus = new EventBus();
+
     public TransactionTestHelper() {
+        bus.register(this);
     }
 
     protected void setMenuChoice(int choice) throws Cancelled {
@@ -81,7 +87,7 @@ public class TransactionTestHelper {
     }
 
     protected void initATMMock(boolean initSimulation) {
-        atm = spy(new ATM(0, "test adress", "Bank test", null, State.SIMULATION));
+        atm = spy(new ATM(bus, 0, "test adress", "Bank test", null, State.SIMULATION));
         atm.getCashDispenser().setInitialCash(new Money(200));
 
         console = Mockito.mock(CustomerConsolePhysical.class);
@@ -174,6 +180,12 @@ public class TransactionTestHelper {
         public String getMessage() {
             return null;
         }
+    }
+
+    @Subscribe
+    public void handleEvent(Status evt) {
+        status = evt;
+        session.setStatus(evt);
     }
 
     /**

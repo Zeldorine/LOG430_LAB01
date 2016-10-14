@@ -41,7 +41,6 @@ import org.mockito.Mockito;
  */
 public class TransactionTest extends TransactionTestHelper {
 
-    Session session;
     Card card;
 
     public TransactionTest() {

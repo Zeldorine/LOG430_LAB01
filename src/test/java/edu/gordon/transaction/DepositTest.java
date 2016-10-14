@@ -90,7 +90,7 @@ public class DepositTest extends TransactionTestHelper {
             setMenuChoice(Message.COMPLETE_DEPOSIT);
             NetworkToBank network = Mockito.mock(NetworkToBank.class);
             Mockito.when(atm.getNetworkToBank()).thenReturn(network);
-            Mockito.when(network.sendMessage(Mockito.any(Message.class), Mockito.any(Balances.class))).thenReturn(getSuccessStatus());
+            status = getSuccessStatus();
 
             deposit = new Deposit(atm.getID(), atm.getBankName(), atm.getPlace(), card, 1414);
             deposit.serialNumber = 1;

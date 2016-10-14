@@ -9,6 +9,8 @@ import edu.gordon.banking.Status;
 import edu.gordon.exception.Cancelled;
 import edu.gordon.core.Network;
 import edu.gordon.network.SimulatedNetworkToBank;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -47,7 +49,7 @@ public class SimulationTest extends TransactionTestHelper {
         try {
             init(false);
             //simulation = new Simulation(atm);
-            network = new SimulatedNetworkToBank(new SimLog(), null);
+            network = new SimulatedNetworkToBank(bus, new SimLog(), null);
 
             balances = new Balances();
             balances.setBalances(new Money(200), new Money(200));
@@ -65,21 +67,21 @@ public class SimulationTest extends TransactionTestHelper {
 
     @Test
     public void TestSendMessageSuccess() {
-        Card card = new Card(1);
-        Message message = new Message(Message.WITHDRAWAL, card, 42, 1, 1, -1, new Money(100));
-        Status status = network.sendMessage(message, balances);
-        assertNotNull(status);
-        assertEquals(true, status.isSuccess());
+            Card card = new Card(1);
+            Message message = new Message(Message.WITHDRAWAL, card, 42, 1, 1, -1, new Money(100));
+            network.sendMessage(message, balances);
+            assertNotNull(status);
+            assertEquals(true, status.isSuccess());
     }
 
     @Test
     public void TestSendMessageFail() {
-        Card card = new Card(1);
-        Message message = new Message(Message.WITHDRAWAL, card, 0, 1, 1, -1, new Money(100));
-        Status status = network.sendMessage(message, balances);
-        assertNotNull(status);
-        assertEquals(false, status.isSuccess());
-        assertEquals("Invalid PIN", status.getMessage());
+            Card card = new Card(1);
+            Message message = new Message(Message.WITHDRAWAL, card, 0, 1, 1, -1, new Money(100));
+            network.sendMessage(message, balances);
+            assertNotNull(status);
+            assertEquals(false, status.isSuccess());
+            assertEquals("Invalid PIN", status.getMessage());
     }
 
 }

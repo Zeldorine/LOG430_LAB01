@@ -2,7 +2,6 @@ package edu.gordon.core;
 
 import edu.gordon.banking.Balances;
 import edu.gordon.banking.Message;
-import edu.gordon.banking.Status;
 
 /**
  *
@@ -25,5 +24,5 @@ public interface Network {
      *         by bank
      *  @return status code returned by bank
      */
-    public Status sendMessage(Message message, Balances balances);
+    public void sendMessage(Message message, Balances balances);
 }

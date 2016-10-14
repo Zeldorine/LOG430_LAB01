@@ -1,5 +1,7 @@
 package edu.gordon.network;
 
+import edu.gordon.Bank.SimulatedBank;
+import com.google.common.eventbus.EventBus;
 import edu.gordon.core.Network;
 import edu.gordon.banking.Balances;
 import edu.gordon.banking.Message;
@@ -14,6 +16,7 @@ import java.net.InetAddress;
 public class SimulatedNetworkToBank  implements Network {
 
     private SimulatedBank bank = new SimulatedBank();
+    private final EventBus bus;
     
     /**
      * Constructor
@@ -21,9 +24,10 @@ public class SimulatedNetworkToBank  implements Network {
      * @param log the log in which to record sending of messages and responses
      * @param bankAddress the network address of the bank
      */
-    public SimulatedNetworkToBank(Log log, InetAddress bankAddress) {
+    public SimulatedNetworkToBank(EventBus bus, Log log, InetAddress bankAddress) {
         this.log = log;
         this.bankAddress = bankAddress;
+        this.bus = bus;
     }
 
     @Override
@@ -37,7 +41,7 @@ public class SimulatedNetworkToBank  implements Network {
     }
 
     @Override
-    public Status sendMessage(Message message, Balances balances) {
+    public void sendMessage(Message message, Balances balances) {
         // LogPhysical sending of the message
 
         log.logSend(message);
@@ -49,7 +53,7 @@ public class SimulatedNetworkToBank  implements Network {
         // LogPhysical the response gotten back
         log.logResponse(result);
 
-        return result;
+        bus.post(result);
     }
 
     // LogPhysical into which to record messages
