@@ -1,5 +1,6 @@
 package helper;
 
+import Event.StatusEvent;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import edu.gordon.atm.ATM;
@@ -9,10 +10,17 @@ import edu.gordon.transaction.Transaction;
 import edu.gordon.banking.Card;
 import edu.gordon.banking.Money;
 import edu.gordon.banking.Receipt;
-import edu.gordon.banking.State;
 import edu.gordon.banking.Status;
 import edu.gordon.core.EnvelopeAcceptor;
 import edu.gordon.exception.Cancelled;
+import edu.gordon.simulation.CoreFactorySimulated;
+import edu.gordon.simulation.SimCardReader;
+import edu.gordon.simulation.SimCashDispenser;
+import edu.gordon.simulation.SimDisplay;
+import edu.gordon.simulation.SimEnvelopeAcceptor;
+import edu.gordon.simulation.SimKeyboard;
+import edu.gordon.simulation.SimOperatorPanel;
+import edu.gordon.simulation.SimReceiptPrinter;
 import edu.gordon.simulation.Simulation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -87,23 +95,28 @@ public class TransactionTestHelper {
     }
 
     protected void initATMMock(boolean initSimulation) {
-        atm = spy(new ATM(bus, 0, "test adress", "Bank test", null, State.SIMULATION));
+        atm = spy(new ATM(0, "test adress", "Bank test", null, new CoreFactorySimulated()));
         atm.getCashDispenser().setInitialCash(new Money(200));
+        
+        atm.getEventBus().register(this);
+
+        session = new Session(atm);
+        setSimulationInstance(ATM.class, "session", atm, session);
 
         console = Mockito.mock(CustomerConsolePhysical.class);
         Mockito.when(atm.getCustomerConsole()).thenReturn(console);
 
         if (initSimulation) {
-            Simulation sim = spy(new Simulation(atm.getOperatorPanel(), atm.getCardReader(),
-                    atm.getDisplay(), atm.getKeyboard(), atm.getCashDispenser(), atm.getEnvelopeAcceptor(),
-                    atm.getReceiptPrinter()));
+            Simulation sim = spy(new Simulation((SimOperatorPanel) atm.getOperatorPanel(), (SimCardReader) atm.getCardReader(),
+                    (SimDisplay) atm.getDisplay(), (SimKeyboard) atm.getKeyboard(), (SimCashDispenser) atm.getCashDispenser(), (SimEnvelopeAcceptor) atm.getEnvelopeAcceptor(),
+                    (SimReceiptPrinter) atm.getReceiptPrinter()));
 
             setSimulationInstance(ATM.class, "envelopeAcceptor", atm, getEnvelopeAcceptor());
             setSimulationInstance(Simulation.class, "theInstance", Simulation.getInstance(), sim);
         } else {
-            new Simulation(atm.getOperatorPanel(), atm.getCardReader(),
-                    atm.getDisplay(), atm.getKeyboard(), atm.getCashDispenser(), atm.getEnvelopeAcceptor(),
-                    atm.getReceiptPrinter());
+            new Simulation((SimOperatorPanel) atm.getOperatorPanel(), (SimCardReader) atm.getCardReader(),
+                    (SimDisplay) atm.getDisplay(), (SimKeyboard) atm.getKeyboard(), (SimCashDispenser) atm.getCashDispenser(), (SimEnvelopeAcceptor) atm.getEnvelopeAcceptor(),
+                    (SimReceiptPrinter) atm.getReceiptPrinter());
         }
 
     }
@@ -147,7 +160,7 @@ public class TransactionTestHelper {
         return new Failure(msg);
     }
 
-    private void setSimulationInstance(Class clazz, String attribut, Object instance, Object newValue) {
+    protected void setSimulationInstance(Class clazz, String attribut, Object instance, Object newValue) {
         try {
             Field field = clazz.getDeclaredField(attribut);
             field.setAccessible(true);
@@ -183,9 +196,9 @@ public class TransactionTestHelper {
     }
 
     @Subscribe
-    public void handleEvent(Status evt) {
-        status = evt;
-        session.setStatus(evt);
+    public void handleEvent(StatusEvent evt) {
+        status = (Status) evt.getSource();
+        session.setStatus(status);
     }
 
     /**

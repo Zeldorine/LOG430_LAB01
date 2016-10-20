@@ -1,5 +1,6 @@
 package edu.gordon.transaction;
 
+import edu.gordon.atm.ATM;
 import helper.TransactionTestHelper;
 import edu.gordon.atm.Session;
 import edu.gordon.banking.Card;
@@ -9,8 +10,6 @@ import edu.gordon.banking.Receipt;
 import edu.gordon.exception.Cancelled;
 import edu.gordon.exception.CardRetained;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -59,7 +58,8 @@ public class TransactionTest extends TransactionTestHelper {
     public void setUp() {
         initATMMock(true);
         card = new Card(2);
-        session = new Session(atm);
+        //session = new Session(atm);
+        //setSimulationInstance(ATM.class, "session", atm, session);
     }
 
     @After

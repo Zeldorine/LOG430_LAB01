@@ -1,5 +1,6 @@
 package edu.gordon.network;
 
+import Event.StatusEvent;
 import edu.gordon.Bank.SimulatedBank;
 import com.google.common.eventbus.EventBus;
 import edu.gordon.core.Network;
@@ -44,16 +45,16 @@ public class SimulatedNetworkToBank  implements Network {
     public void sendMessage(Message message, Balances balances) {
         // LogPhysical sending of the message
 
-        log.logSend(message);
+        log.logSend(message.toString());
 
         // Simulate the sending of the message - here is where the real code
         // to actually send the message over the network would go
         Status result = bank.handleMessage(message, balances);
 
         // LogPhysical the response gotten back
-        log.logResponse(result);
+        log.logResponse(result.toString());
 
-        bus.post(result);
+        bus.post(new StatusEvent(result));
     }
 
     // LogPhysical into which to record messages

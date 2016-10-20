@@ -1,8 +1,5 @@
 package edu.gordon.simulation;
 
-import edu.gordon.banking.Message;
-import edu.gordon.banking.Money;
-import edu.gordon.banking.Status;
 import edu.gordon.core.Log;
 
 /**
@@ -10,27 +7,27 @@ import edu.gordon.core.Log;
  * @author Zeldorine
  */
 public class SimLog implements Log {
-        public void logSend(Message message)
+        public void logSend(String message)
     {
-        Simulation.getInstance().printLogLine("Message:   " + message.toString()); 
+        Simulation.getInstance().printLogLine("Message:   " + message); 
     }
     
     /** LogPhysical a response received from a message
      *
      *  @param status the status object returned by the bank in response
      */
-    public void logResponse(Status response)
+    public void logResponse(String response)
     {
-        Simulation.getInstance().printLogLine("Response:  " + response.toString());
+        Simulation.getInstance().printLogLine("Response:  " + response);
     }
     
     /** LogPhysical the dispensing of cash by the cash dispenser
      *
      *  @param amount the amount of cash being dispensed
      */
-    public void logCashDispensed(Money amount)
+    public void logCashDispensed(String amount)
     {
-        Simulation.getInstance().printLogLine("Dispensed: " + amount.toString());
+        Simulation.getInstance().printLogLine("Dispensed: " + amount);
     }
     
     /** LogPhysical accepting an envelope.  This method is only called if an envelope
