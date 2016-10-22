@@ -1,6 +1,6 @@
 package edu.gordon.network;
 
-import Event.StatusEvent;
+import edu.gordon.event.StatusEvent;
 import edu.gordon.Bank.SimulatedBank;
 import com.google.common.eventbus.EventBus;
 import edu.gordon.core.Network;

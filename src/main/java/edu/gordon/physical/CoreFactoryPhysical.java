@@ -23,14 +23,14 @@ import java.net.InetAddress;
 public class CoreFactoryPhysical extends CoreFactory {
 
     public CardReader cardReader;
-    public Log log;
+    public Log log = new LogPhysical();
     public Network network;
     public CashDispenser cashDispenser;
     public EnvelopeAcceptor envelopeAcceptor;
     public CustomerConsole customerConsole;
     public OperatorPanel operatorPanel;
-    public ReceiptPrinter receiptPrinter;
-    public Display display;
+    public ReceiptPrinter receiptPrinter = new ReceiptPrinterPhysical();
+    public Display display = new DisplayPhysical();
     public Keyboard keyboard;
 
     public void init() {
@@ -48,27 +48,24 @@ public class CoreFactoryPhysical extends CoreFactory {
     }
 
     public Log getLog() {
-        if (log == null) {
-            log = new LogPhysical();
-        }
         return log;
     }
 
-    public Network getNetwork(EventBus bus, Log log, InetAddress bankAddress) {
+    public Network getNetwork(EventBus bus, InetAddress bankAddress) {
         if (network == null) {
             network = new NetworkToBank(bus, log, bankAddress);
         }
         return network;
     }
 
-    public CashDispenser getCashDispenser(Log log) {
+    public CashDispenser getCashDispenser() {
         if (cashDispenser == null) {
             cashDispenser = new CashDispenserPhysical((LogPhysical)log);
         }
         return cashDispenser;
     }
 
-    public EnvelopeAcceptor getEnvelopeAcceptor(Log log) {
+    public EnvelopeAcceptor getEnvelopeAcceptor() {
         if (envelopeAcceptor == null) {
             envelopeAcceptor = new EnvelopeAcceptorPhysical((LogPhysical)log);
         }
@@ -90,20 +87,14 @@ public class CoreFactoryPhysical extends CoreFactory {
     }
 
     public ReceiptPrinter getReceiptPrinter() {
-        if (receiptPrinter == null) {
-            receiptPrinter = new ReceiptPrinterPhysical();
-        }
         return receiptPrinter;
     }
 
     public Display getDisplay() {
-        if (display == null) {
-            display = new DisplayPhysical();
-        }
         return display;
     }
 
-    public Keyboard getKeyboard(Display display, EnvelopeAcceptor envelopeAcceptor) {
+    public Keyboard getKeyboard(EnvelopeAcceptor envelopeAcceptor) {
         if (keyboard == null) {
             keyboard = new KeyboardPhysical();
         }

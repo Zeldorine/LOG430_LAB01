@@ -1,6 +1,6 @@
 package edu.gordon.simulation;
 
-import Event.DisplayMessageEvent;
+import edu.gordon.event.DisplayMessageEvent;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import edu.gordon.banking.Money;

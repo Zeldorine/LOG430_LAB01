@@ -1,4 +1,4 @@
-package Event;
+package edu.gordon.event;
 
 import java.util.EventObject;
 
@@ -6,9 +6,9 @@ import java.util.EventObject;
  *
  * @author Zeldorine
  */
-public class EnvelopeEvent extends EventObject {
+public class ReceiptEvent extends EventObject{
     
-    public EnvelopeEvent(Object source) {
+    public ReceiptEvent(Object source) {
         super(source);
     }
     

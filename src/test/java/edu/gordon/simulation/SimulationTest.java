@@ -48,7 +48,6 @@ public class SimulationTest extends TransactionTestHelper {
     public void setUp() {
         try {
             init(false);
-            //simulation = new Simulation(atm);
             network = new SimulatedNetworkToBank(bus, new SimLog(), null);
 
             balances = new Balances();

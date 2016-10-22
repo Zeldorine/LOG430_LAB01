@@ -1,4 +1,4 @@
-package Event;
+package edu.gordon.event;
 
 import java.util.EventObject;
 

@@ -1,6 +1,6 @@
 package helper;
 
-import Event.StatusEvent;
+import edu.gordon.event.StatusEvent;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import edu.gordon.atm.ATM;
@@ -95,10 +95,12 @@ public class TransactionTestHelper {
     }
 
     protected void initATMMock(boolean initSimulation) {
-        atm = spy(new ATM(0, "test adress", "Bank test", null, new CoreFactorySimulated()));
+        CoreFactorySimulated factory = new CoreFactorySimulated();
+        atm = spy(new ATM(0, "test adress", "Bank test", null, factory));
         atm.getCashDispenser().setInitialCash(new Money(200));
         
-        atm.getEventBus().register(this);
+        EventBus bus = atm.getEventBus();
+        bus.register(this);
 
         session = new Session(atm);
         setSimulationInstance(ATM.class, "session", atm, session);
@@ -107,16 +109,16 @@ public class TransactionTestHelper {
         Mockito.when(atm.getCustomerConsole()).thenReturn(console);
 
         if (initSimulation) {
-            Simulation sim = spy(new Simulation((SimOperatorPanel) atm.getOperatorPanel(), (SimCardReader) atm.getCardReader(),
-                    (SimDisplay) atm.getDisplay(), (SimKeyboard) atm.getKeyboard(), (SimCashDispenser) atm.getCashDispenser(), (SimEnvelopeAcceptor) atm.getEnvelopeAcceptor(),
-                    (SimReceiptPrinter) atm.getReceiptPrinter()));
+            Simulation sim = spy(new Simulation((SimOperatorPanel) factory.getOperatorPanel(bus), (SimCardReader) atm.getCardReader(),
+                    (SimDisplay) factory.getDisplay(), (SimKeyboard) factory.getKeyboard(atm.getEnvelopeAcceptor()), (SimCashDispenser) atm.getCashDispenser(), (SimEnvelopeAcceptor) atm.getEnvelopeAcceptor(),
+                    (SimReceiptPrinter) factory.getReceiptPrinter()));
 
             setSimulationInstance(ATM.class, "envelopeAcceptor", atm, getEnvelopeAcceptor());
             setSimulationInstance(Simulation.class, "theInstance", Simulation.getInstance(), sim);
         } else {
-            new Simulation((SimOperatorPanel) atm.getOperatorPanel(), (SimCardReader) atm.getCardReader(),
-                    (SimDisplay) atm.getDisplay(), (SimKeyboard) atm.getKeyboard(), (SimCashDispenser) atm.getCashDispenser(), (SimEnvelopeAcceptor) atm.getEnvelopeAcceptor(),
-                    (SimReceiptPrinter) atm.getReceiptPrinter());
+            new Simulation((SimOperatorPanel) factory.getOperatorPanel(bus), (SimCardReader) atm.getCardReader(),
+                    (SimDisplay) factory.getDisplay(), (SimKeyboard) factory.getKeyboard(atm.getEnvelopeAcceptor()), (SimCashDispenser) atm.getCashDispenser(), (SimEnvelopeAcceptor) atm.getEnvelopeAcceptor(),
+                    (SimReceiptPrinter) factory.getReceiptPrinter());
         }
 
     }

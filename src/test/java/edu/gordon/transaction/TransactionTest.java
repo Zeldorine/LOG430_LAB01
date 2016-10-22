@@ -1,8 +1,6 @@
 package edu.gordon.transaction;
 
-import edu.gordon.atm.ATM;
 import helper.TransactionTestHelper;
-import edu.gordon.atm.Session;
 import edu.gordon.banking.Card;
 import edu.gordon.banking.Message;
 import edu.gordon.banking.Money;
@@ -71,7 +69,7 @@ public class TransactionTest extends TransactionTestHelper {
         try {
             setMenuChoice(0);
             Transaction withdrawal = session.makeTransaction(atm.getID(), atm.getBankName(),
-                    atm.getPlace(), 0, atm.getNetworkToBank(), card, 1414);
+                    atm.getPlace(), 0, card, 1414);
             Assert.assertNotNull(withdrawal);
             assertThat(withdrawal, instanceOf(Withdrawal.class));
         } catch (Cancelled ex) {
@@ -84,7 +82,7 @@ public class TransactionTest extends TransactionTestHelper {
         try {
             setMenuChoice(1);
             Transaction deposit = session.makeTransaction(atm.getID(), atm.getBankName(),
-                    atm.getPlace(), 1, atm.getNetworkToBank(), card, 1414);
+                    atm.getPlace(), 1, card, 1414);
             Assert.assertNotNull(deposit);
             assertThat(deposit, instanceOf(Deposit.class));
         } catch (Cancelled ex) {
@@ -97,7 +95,7 @@ public class TransactionTest extends TransactionTestHelper {
         try {
             setMenuChoice(2);
             Transaction transfer = session.makeTransaction(atm.getID(), atm.getBankName(),
-                    atm.getPlace(), 2, atm.getNetworkToBank(), card, 1414);
+                    atm.getPlace(), 2, card, 1414);
             Assert.assertNotNull(transfer);
             assertThat(transfer, instanceOf(Transfer.class));
         } catch (Cancelled ex) {
@@ -110,7 +108,7 @@ public class TransactionTest extends TransactionTestHelper {
         try {
             setMenuChoice(3);
             Transaction inquiry = session.makeTransaction(atm.getID(), atm.getBankName(),
-                    atm.getPlace(), 3, atm.getNetworkToBank(), card, 1414);
+                    atm.getPlace(), 3, card, 1414);
             Assert.assertNotNull(inquiry);
             assertThat(inquiry, instanceOf(Inquiry.class));
         } catch (Cancelled ex) {
@@ -123,7 +121,7 @@ public class TransactionTest extends TransactionTestHelper {
         try {
             setMenuChoice(4);
             Transaction nullValue = session.makeTransaction(atm.getID(), atm.getBankName(),
-                    atm.getPlace(), 4, atm.getNetworkToBank(), card, 1414);
+                    atm.getPlace(), 4, card, 1414);
             Assert.assertNull(nullValue);
         } catch (Cancelled ex) {
             fail("Fail to create null trx");
@@ -136,7 +134,7 @@ public class TransactionTest extends TransactionTestHelper {
             setMenuChoice(1);
             setReadAmount(new Money(100));
             Transaction deposit = session.makeTransaction(atm.getID(), atm.getBankName(),
-                    atm.getPlace(), 1, atm.getNetworkToBank(), card, 1234);
+                    atm.getPlace(), 1, card, 1234);
             assertThat(deposit, instanceOf(Deposit.class));
             deposit.serialNumber = 1;
             setMenuChoice(0);
@@ -180,7 +178,7 @@ public class TransactionTest extends TransactionTestHelper {
             setMenuChoice(1);
             setReadAmount(new Money(100));
             Transaction withdrawal = session.makeTransaction(atm.getID(), atm.getBankName(),
-                    atm.getPlace(), 1, atm.getNetworkToBank(), card, 1234);
+                    atm.getPlace(), 1, card, 1234);
             assertThat(withdrawal, instanceOf(Deposit.class));
             withdrawal.serialNumber = 1;
             setMenuChoice(0);
@@ -197,7 +195,7 @@ public class TransactionTest extends TransactionTestHelper {
         try {
             setMenuChoice(2);
             Transaction transfer = session.makeTransaction(atm.getID(), atm.getBankName(),
-                    atm.getPlace(), 2, atm.getNetworkToBank(), card, 1234);
+                    atm.getPlace(), 2, card, 1234);
             assertThat(transfer, instanceOf(Transfer.class));
             transfer.serialNumber = 1;
             setMenuChoice(0);
@@ -251,7 +249,7 @@ public class TransactionTest extends TransactionTestHelper {
         try {
             setMenuChoice(3);
             Transaction inquiry = session.makeTransaction(atm.getID(), atm.getBankName(),
-                    atm.getPlace(), 3, atm.getNetworkToBank(), card, 1234);
+                    atm.getPlace(), 3, card, 1234);
             inquiry.serialNumber = 1;
             setMenuChoice(0);
             session.performTransaction(inquiry);
@@ -292,7 +290,7 @@ public class TransactionTest extends TransactionTestHelper {
         try {
             setMenuChoice(0);
             Transaction withdrawal = session.makeTransaction(atm.getID(), atm.getBankName(),
-                    atm.getPlace(), 0, atm.getNetworkToBank(), card, 1234);
+                    atm.getPlace(), 0, card, 1234);
             assertThat(withdrawal, instanceOf(Withdrawal.class));
             withdrawal.serialNumber = 1;
             setMenuChoice(0);
@@ -335,7 +333,7 @@ public class TransactionTest extends TransactionTestHelper {
             setMenuChoice(3);
             Mockito.when(atm.getCustomerConsole().readPIN(Mockito.anyString())).thenReturn(-1);
             Transaction inquiry = session.makeTransaction(atm.getID(), atm.getBankName(),
-                    atm.getPlace(), 3, atm.getNetworkToBank(), card, 1234);
+                    atm.getPlace(), 3, card, 1234);
             assertThat(inquiry, instanceOf(Inquiry.class));
             inquiry.serialNumber = 1;
             setMenuChoice(0);

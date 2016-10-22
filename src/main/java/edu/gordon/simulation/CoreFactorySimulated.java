@@ -23,14 +23,14 @@ import java.net.InetAddress;
 public class CoreFactorySimulated extends CoreFactory {
 
     public CardReader cardReader;
-    public Log log;
+    public Log log = new SimLog();
     public Network network;
     public CashDispenser cashDispenser;
     public EnvelopeAcceptor envelopeAcceptor;
     public CustomerConsole customerConsole;
     public OperatorPanel operatorPanel;
-    public ReceiptPrinter receiptPrinter;
-    public Display display;
+    public ReceiptPrinter receiptPrinter = new SimReceiptPrinter();
+    public Display display = new SimDisplay();
     public Keyboard keyboard;
     
     public void init() {
@@ -51,36 +51,33 @@ public class CoreFactorySimulated extends CoreFactory {
     }
 
     public Log getLog() {
-        if (log == null) {
-            log = new SimLog();
-        }
         return log;
     }
 
-    public Network getNetwork(EventBus bus, Log log, InetAddress bankAddress) {
+    public Network getNetwork(EventBus eventBus, InetAddress bankAddress) {
         if (network == null) {
-            network = new SimulatedNetworkToBank(bus, log, bankAddress);
+            network = new SimulatedNetworkToBank(eventBus, log, bankAddress);
         }
         return network;
     }
 
-    public CashDispenser getCashDispenser(Log log) {
+    public CashDispenser getCashDispenser() {
         if (cashDispenser == null) {
             cashDispenser = new SimCashDispenser((SimLog)log);
         }
         return cashDispenser;
     }
 
-    public EnvelopeAcceptor getEnvelopeAcceptor(Log log) {
+    public EnvelopeAcceptor getEnvelopeAcceptor() {
         if (envelopeAcceptor == null) {
             envelopeAcceptor = new SimEnvelopeAcceptor((SimLog)log);
         }
         return envelopeAcceptor;
     }
 
-    public CustomerConsole getCustomerConsole(EventBus bus) {
+    public CustomerConsole getCustomerConsole(EventBus eventBus) {
         if (customerConsole == null) {
-            customerConsole = new SimCustomerConsole(bus);
+            customerConsole = new SimCustomerConsole(eventBus);
         }
         return customerConsole;
     }
@@ -93,20 +90,14 @@ public class CoreFactorySimulated extends CoreFactory {
     }
 
     public ReceiptPrinter getReceiptPrinter() {
-        if (receiptPrinter == null) {
-            receiptPrinter = new SimReceiptPrinter();
-        }
         return receiptPrinter;
     }
 
     public Display getDisplay() {
-        if (display == null) {
-            display = new SimDisplay();
-        }
         return display;
     }
 
-    public Keyboard getKeyboard(Display display, EnvelopeAcceptor envelopeAcceptor) {
+    public Keyboard getKeyboard(EnvelopeAcceptor envelopeAcceptor) {
         if (keyboard == null) {
             keyboard = new SimKeyboard((SimDisplay)display, (SimEnvelopeAcceptor)envelopeAcceptor);
         }
