@@ -68,6 +68,7 @@ public class ATM implements Runnable {
         coreFactory.getKeyboard(envelopeAcceptor);
         networkToBank = coreFactory.getNetwork(eventBus, bankAddress);
         operatorPanel = coreFactory.getOperatorPanel(eventBus);
+        coreFactory.getReceiptPrinter(eventBus);
 
         coreFactory.init();
     }
@@ -160,27 +161,33 @@ public class ATM implements Runnable {
 
     @Subscribe
     public void handleEvent(StatusEvent evt) {
-        Status status = (Status) evt.getSource();
-        if (status != null) {
-            session.setStatus(status);
+        if (evt != null) {
+            Status status = (Status) evt.getSource();
+            if (status != null && session != null) {
+                session.setStatus(status);
+            }
         }
     }
 
     @Subscribe
     public void handleEvent(CardEvent evt) {
-        Boolean cardinserted = (Boolean) evt.getSource();
-        if (cardinserted) {
-            cardInserted();
+        if (evt != null) {
+            Boolean cardinserted = (Boolean) evt.getSource();
+            if (cardinserted) {
+                cardInserted();
+            }
         }
     }
 
     @Subscribe
     public void handleEvent(SwitchEvent evt) {
-        Boolean on = (Boolean) evt.getSource();
-        if (on) {
-            switchOn();
-        } else {
-            switchOff();
+        if (evt != null) {
+            Boolean on = (Boolean) evt.getSource();
+            if (on) {
+                switchOn();
+            } else {
+                switchOff();
+            }
         }
     }
 
@@ -257,7 +264,6 @@ public class ATM implements Runnable {
     public Network getNetworkToBank() {
         return networkToBank;
     }
-
 
     // Private methods
     /**

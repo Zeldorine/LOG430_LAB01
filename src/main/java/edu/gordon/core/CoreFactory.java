@@ -18,7 +18,7 @@ public abstract class CoreFactory {
     public abstract EnvelopeAcceptor getEnvelopeAcceptor();
     public abstract CustomerConsole getCustomerConsole(EventBus eventBus);
     public abstract OperatorPanel getOperatorPanel(EventBus eventBus);
-    public abstract ReceiptPrinter getReceiptPrinter();
+    public abstract ReceiptPrinter getReceiptPrinter(EventBus eventBus);
     public abstract Display getDisplay();
     public abstract Keyboard getKeyboard(EnvelopeAcceptor envelopeAcceptor);
 }

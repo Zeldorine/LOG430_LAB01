@@ -86,7 +86,7 @@ public class CoreFactoryPhysical extends CoreFactory {
         return operatorPanel;
     }
 
-    public ReceiptPrinter getReceiptPrinter() {
+    public ReceiptPrinter getReceiptPrinter(EventBus bus) {
         return receiptPrinter;
     }
 

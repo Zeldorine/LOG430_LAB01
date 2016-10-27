@@ -29,14 +29,14 @@ public class CoreFactorySimulated extends CoreFactory {
     public EnvelopeAcceptor envelopeAcceptor;
     public CustomerConsole customerConsole;
     public OperatorPanel operatorPanel;
-    public ReceiptPrinter receiptPrinter = new SimReceiptPrinter();
+    public ReceiptPrinter receiptPrinter;
     public Display display = new SimDisplay();
     public Keyboard keyboard;
-    
+
     public void init() {
-        new Simulation((SimOperatorPanel)operatorPanel, (SimCardReader)cardReader,
-                (SimDisplay)display, (SimKeyboard)keyboard, (SimCashDispenser)cashDispenser, (SimEnvelopeAcceptor)envelopeAcceptor,
-                (SimReceiptPrinter)receiptPrinter);
+        new Simulation((SimOperatorPanel) operatorPanel, (SimCardReader) cardReader,
+                (SimDisplay) display, (SimKeyboard) keyboard, (SimCashDispenser) cashDispenser, (SimEnvelopeAcceptor) envelopeAcceptor,
+                (SimReceiptPrinter) receiptPrinter);
     }
 
     public State getState() {
@@ -63,14 +63,14 @@ public class CoreFactorySimulated extends CoreFactory {
 
     public CashDispenser getCashDispenser() {
         if (cashDispenser == null) {
-            cashDispenser = new SimCashDispenser((SimLog)log);
+            cashDispenser = new SimCashDispenser((SimLog) log);
         }
         return cashDispenser;
     }
 
     public EnvelopeAcceptor getEnvelopeAcceptor() {
         if (envelopeAcceptor == null) {
-            envelopeAcceptor = new SimEnvelopeAcceptor((SimLog)log);
+            envelopeAcceptor = new SimEnvelopeAcceptor((SimLog) log);
         }
         return envelopeAcceptor;
     }
@@ -89,7 +89,10 @@ public class CoreFactorySimulated extends CoreFactory {
         return operatorPanel;
     }
 
-    public ReceiptPrinter getReceiptPrinter() {
+    public ReceiptPrinter getReceiptPrinter(EventBus eventBus) {
+        if (receiptPrinter == null) {
+            receiptPrinter = new SimReceiptPrinter(eventBus);
+        }
         return receiptPrinter;
     }
 
@@ -99,7 +102,7 @@ public class CoreFactorySimulated extends CoreFactory {
 
     public Keyboard getKeyboard(EnvelopeAcceptor envelopeAcceptor) {
         if (keyboard == null) {
-            keyboard = new SimKeyboard((SimDisplay)display, (SimEnvelopeAcceptor)envelopeAcceptor);
+            keyboard = new SimKeyboard((SimDisplay) display, (SimEnvelopeAcceptor) envelopeAcceptor);
         }
         return keyboard;
     }

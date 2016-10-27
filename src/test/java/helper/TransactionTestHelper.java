@@ -98,7 +98,7 @@ public class TransactionTestHelper {
         CoreFactorySimulated factory = new CoreFactorySimulated();
         atm = spy(new ATM(0, "test adress", "Bank test", null, factory));
         atm.getCashDispenser().setInitialCash(new Money(200));
-        
+
         EventBus bus = atm.getEventBus();
         bus.register(this);
 
@@ -111,14 +111,14 @@ public class TransactionTestHelper {
         if (initSimulation) {
             Simulation sim = spy(new Simulation((SimOperatorPanel) factory.getOperatorPanel(bus), (SimCardReader) atm.getCardReader(),
                     (SimDisplay) factory.getDisplay(), (SimKeyboard) factory.getKeyboard(atm.getEnvelopeAcceptor()), (SimCashDispenser) atm.getCashDispenser(), (SimEnvelopeAcceptor) atm.getEnvelopeAcceptor(),
-                    (SimReceiptPrinter) factory.getReceiptPrinter()));
+                    (SimReceiptPrinter) factory.getReceiptPrinter(bus)));
 
             setSimulationInstance(ATM.class, "envelopeAcceptor", atm, getEnvelopeAcceptor());
             setSimulationInstance(Simulation.class, "theInstance", Simulation.getInstance(), sim);
         } else {
             new Simulation((SimOperatorPanel) factory.getOperatorPanel(bus), (SimCardReader) atm.getCardReader(),
                     (SimDisplay) factory.getDisplay(), (SimKeyboard) factory.getKeyboard(atm.getEnvelopeAcceptor()), (SimCashDispenser) atm.getCashDispenser(), (SimEnvelopeAcceptor) atm.getEnvelopeAcceptor(),
-                    (SimReceiptPrinter) factory.getReceiptPrinter());
+                    (SimReceiptPrinter) factory.getReceiptPrinter(bus));
         }
 
     }
@@ -199,8 +199,10 @@ public class TransactionTestHelper {
 
     @Subscribe
     public void handleEvent(StatusEvent evt) {
-        status = (Status) evt.getSource();
-        session.setStatus(status);
+        if (evt != null && session != null) {
+            status = (Status) evt.getSource();
+            session.setStatus(status);
+        }
     }
 
     /**
