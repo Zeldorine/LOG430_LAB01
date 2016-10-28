@@ -12,6 +12,7 @@ import edu.gordon.banking.Money;
 import edu.gordon.banking.Receipt;
 import edu.gordon.banking.Status;
 import edu.gordon.core.EnvelopeAcceptor;
+import edu.gordon.event.EnvelopeEvent;
 import edu.gordon.exception.Cancelled;
 import edu.gordon.simulation.CoreFactorySimulated;
 import edu.gordon.simulation.SimCardReader;
@@ -125,8 +126,8 @@ public class TransactionTestHelper {
 
     private EnvelopeAcceptor getEnvelopeAcceptor() {
         return new EnvelopeAcceptor() {
-            public boolean acceptEnvelope() throws Cancelled {
-                return true;
+            public void acceptEnvelope() throws Cancelled {
+                //return true;
             }
         };
     }
@@ -202,6 +203,16 @@ public class TransactionTestHelper {
         if (evt != null && session != null) {
             status = (Status) evt.getSource();
             session.setStatus(status);
+        }
+    }
+    
+        @Subscribe
+    public void handleEvent(EnvelopeEvent evt) {
+        if (evt != null && session != null) {
+            Boolean inserted = (Boolean) evt.getSource();
+            if(session != null){
+                session.equals(inserted);
+            }
         }
     }
 

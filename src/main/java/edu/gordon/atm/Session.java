@@ -230,7 +230,7 @@ public class Session {
                         }
 
                         if (currentTransaction.needAcceptEnvelope()) {
-                            if (atm.getEnvelopeAcceptor().acceptEnvelope()) {
+                            if (evelopeInserted) {
                                 atm.getNetworkToBank().sendMessage(currentTransaction.getEnvelopeAcceptMessage(), currentTransaction.getBalances());
                             }
                         }
@@ -472,4 +472,9 @@ public class Session {
 
     Receipt receipt;
     Message message;
+    Boolean evelopeInserted = false;
+
+    public void setEnvelopeInserted(Boolean on) {
+        evelopeInserted = true;
+    }
 }

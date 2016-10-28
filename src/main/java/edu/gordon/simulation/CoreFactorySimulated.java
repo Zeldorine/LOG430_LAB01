@@ -68,9 +68,9 @@ public class CoreFactorySimulated extends CoreFactory {
         return cashDispenser;
     }
 
-    public EnvelopeAcceptor getEnvelopeAcceptor() {
+    public EnvelopeAcceptor getEnvelopeAcceptor(EventBus eventBus) {
         if (envelopeAcceptor == null) {
-            envelopeAcceptor = new SimEnvelopeAcceptor((SimLog) log);
+            envelopeAcceptor = new SimEnvelopeAcceptor((SimLog) log, eventBus);
         }
         return envelopeAcceptor;
     }

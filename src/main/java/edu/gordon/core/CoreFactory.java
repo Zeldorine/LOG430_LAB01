@@ -15,7 +15,7 @@ public abstract class CoreFactory {
     public abstract Log getLog();
     public abstract Network getNetwork(EventBus bus, InetAddress bankAddress);
     public abstract CashDispenser getCashDispenser();
-    public abstract EnvelopeAcceptor getEnvelopeAcceptor();
+    public abstract EnvelopeAcceptor getEnvelopeAcceptor(EventBus eventBus);
     public abstract CustomerConsole getCustomerConsole(EventBus eventBus);
     public abstract OperatorPanel getOperatorPanel(EventBus eventBus);
     public abstract ReceiptPrinter getReceiptPrinter(EventBus eventBus);

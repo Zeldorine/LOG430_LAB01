@@ -12,5 +12,5 @@ public interface EnvelopeAcceptor {
      *  @exception CustomerConsole.Cancelled if operation timed out or the
      *             customer cancelled it
      */
-    public boolean acceptEnvelope() throws Cancelled;
+    public void acceptEnvelope() throws Cancelled;
 }

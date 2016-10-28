@@ -22,6 +22,7 @@ import edu.gordon.core.CustomerConsole;
 import edu.gordon.core.EnvelopeAcceptor;
 import edu.gordon.core.OperatorPanel;
 import edu.gordon.core.Network;
+import edu.gordon.event.EnvelopeEvent;
 
 /**
  * Representation for the ATM itself. An object of this class "owns" the objects
@@ -64,7 +65,7 @@ public class ATM implements Runnable {
         cardReader = coreFactory.getCardReader(eventBus);
         cashDispenser = coreFactory.getCashDispenser();
         customerConsole = coreFactory.getCustomerConsole(eventBus);
-        envelopeAcceptor = coreFactory.getEnvelopeAcceptor();
+        envelopeAcceptor = coreFactory.getEnvelopeAcceptor(eventBus);
         coreFactory.getKeyboard(envelopeAcceptor);
         networkToBank = coreFactory.getNetwork(eventBus, bankAddress);
         operatorPanel = coreFactory.getOperatorPanel(eventBus);
@@ -187,6 +188,16 @@ public class ATM implements Runnable {
                 switchOn();
             } else {
                 switchOff();
+            }
+        }
+    }
+    
+        @Subscribe
+    public void handleEvent(EnvelopeEvent evt) {
+        if (evt != null) {
+            Boolean on = (Boolean) evt.getSource();
+            if(session != null){
+                session.setEnvelopeInserted(on);
             }
         }
     }

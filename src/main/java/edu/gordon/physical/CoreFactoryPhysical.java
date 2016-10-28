@@ -65,9 +65,9 @@ public class CoreFactoryPhysical extends CoreFactory {
         return cashDispenser;
     }
 
-    public EnvelopeAcceptor getEnvelopeAcceptor() {
+    public EnvelopeAcceptor getEnvelopeAcceptor(EventBus eventBus) {
         if (envelopeAcceptor == null) {
-            envelopeAcceptor = new EnvelopeAcceptorPhysical((LogPhysical)log);
+            envelopeAcceptor = new EnvelopeAcceptorPhysical((LogPhysical)log, eventBus);
         }
         return envelopeAcceptor;
     }
